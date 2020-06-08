@@ -1,68 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Fast Dataset Cleaner by PhotoRoom - 🏃
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+- Frontend : run `npm install` in _front_ directory.
+- Backend : run `pip install -r requirements.txt` in this directory.
 
-### `npm start`
+## Launch the platform
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Backend : run `sh run.sh` in a terminal. You can modify the `run.sh` script file in order to adjust the parameters.
+- Frontend: run `npm start` in a terminal in _front_ folder.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Then, open your navigator and go to _localhost:3000_ to see the platform live.
 
-### `npm test`
+## How it works
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+*This platform is built for doing binary classification on images.* This could be helpful *either for cleaning datasets* or adding a label to each image in order to learn some task afterwards.*
 
-### `npm run build`
+When launching the platform for the first time, you need to fill in inputs in the left menu - accessible with a _click on the banner_ or by typing on the _Space bar_. Once done, you can close the banner - by typing on the _space bar_ or _clicking on the PhotoRoom logo_.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Images to annotate are displayed with a digit on their left. Typing on the associated key or clicking on the card toggles the annotation of the image. By default, every picture has _true_ value. When all the images on a page are annotated, type *_Enter_* key to validate the annotations. You can then check in your files that a new csv was created with two new columns for the annotator and the annotation, and that these annotations were written down.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+You can *change the pages with your keyboard arrows*, which enables you to navigate in your dataset and reannotate some images if necessary. BEWARE: ONLY _Enter_ button saves the annotations.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+When refreshing the page, unlabeled images are shown. If after a refresh of the page the final screen is displayed, you're done with labeling your dataset! 🎉
 
-### `npm run eject`
+## Parser arguments
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+You may need to change the parameters of `run.sh` script file. Here are the possible arguments:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `--csv_path`: the path (relative or absolute) to the csv file you want to annotate.
+- `--annotated_suffix`: the fragment to add in the name of your annotated csv. Default: _"_annotated"_.
+- `--annotator_column_name`: the name of the annotator column to add. Default: _"annotator"_.
+- `--annotation_column_name`: the name of the annotation column to add. Default: _"is_valid"_.
+- `--id_column_name`: the name of the id column. This column should include the paths to images of your dataset (these should then be unique ids). Default: _"id"_.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Customize the image loader
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+If you need to display different images (like concatenate several images for each card), you may modify *build_image_for_row* function in _back.api.utils_. This function takes a row of your DataFrame and the name of the id column as input and returns a base64 encoded image.
