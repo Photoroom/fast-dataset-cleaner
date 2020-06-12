@@ -14,6 +14,5 @@ export default withStyles(({ unit, color }: PhotoRoomThemeType) => ({
         borderRadius: 3 * unit,
         height: 0.25 * unit,
         background: color.bannerSeparator,
-        // transition: `opacity ${speed.fast}s ease-in-out`,
     },
 }))(Separator);

@@ -17,9 +17,12 @@ type Props = {
 
 function Sample(props: Props){
     const { isBannerOpen, sample, navigationDirection, handleChangeValue, css, styles } = props;
-    const { id, src, value, sampleNumber, annotated, changing } = sample;
+    const { id, src, value, sampleNumber, annotated, changing, combination } = sample;
 
     const [isValid, setIsValid] = useState(value);
+    const [hovered, setHovered] = useState(false);
+
+    const handleHover = () => setHovered(!hovered);
 
     useEffect(() => setIsValid(value), [value]);
 
@@ -64,6 +67,8 @@ function Sample(props: Props){
                     <div
                         onClick={toggleValue}
                         onKeyDown={handleKeyPress}
+                        onMouseEnter={handleHover}
+                        onMouseLeave={handleHover}
                         {...css(
                             styles.card,
                             isValid ? styles.cardValid : styles.cardNotValid,
@@ -74,7 +79,7 @@ function Sample(props: Props){
                             <div {...css(styles.id)}>{id}</div>
                             {annotated && <div {...css(styles.annotated)}>{isValid ? '✔' : '✘'}</div>}
                         </div>
-                        <img src={src} alt="source" {...css(styles.image)} />
+                        <img src={hovered ? combination : src} alt="source" {...css(styles.image)} />
                     </div>
                 </animated.div>
                 )

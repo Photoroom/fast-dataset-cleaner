@@ -31,9 +31,10 @@ csv_annotated = get_annotated_csv_path(args.csv_path)
 def get_images_from_rows(selected_rows):
     images = []
     for ind, row in selected_rows.iterrows():
-        image = utils.build_image_for_row(row, ID_COLUMN)
+        image, combination = utils.build_image_for_row(row, ID_COLUMN)
         images.append({'id': row[ID_COLUMN],
                     'image': image,
+                    'combination': combination,
                     'index': ind,
                     'value': row[ANNOTATION_COLUMN] if not math.isnan(row[ANNOTATION_COLUMN]) else 'None'})
     return images

@@ -3,36 +3,31 @@ import { withStyles, WithStylesProps } from 'react-with-styles';
 
 import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
 import Sample, { cardWidth } from './Sample';
-import Progress from './Progress';
-import { SampleType, ProgressProps } from '../types/Annotation';
+import { SampleType } from '../types/Annotation';
 
 type Props = {
     images: SampleType[];
     isBannerOpen: boolean;
     navigationDirection: string;
-    progress: ProgressProps;
     handleChangeValue: Function;
 } & WithStylesProps;
 
 function SampleAnnotation(props: Props) {
-    const { isBannerOpen, images, navigationDirection, progress, handleChangeValue, css, styles } = props;
+    const { isBannerOpen, images, navigationDirection, handleChangeValue, css, styles } = props;
 
     return (
-        <>
-            <div {...css(styles.mainColumn)}>
-                {images.map(
-                    (sample: SampleType) => 
-                        <Sample
-                            sample={sample}
-                            isBannerOpen={isBannerOpen}
-                            handleChangeValue={handleChangeValue}
-                            navigationDirection={navigationDirection}
-                            key={sample.name}
-                        />
-                )}
-            </div>
-            {images.length !== 0 && <Progress progress={progress} />}
-        </>
+        <div {...css(styles.mainColumn)}>
+            {images.map(
+                (sample: SampleType) => 
+                    <Sample
+                        sample={sample}
+                        isBannerOpen={isBannerOpen}
+                        handleChangeValue={handleChangeValue}
+                        navigationDirection={navigationDirection}
+                        key={sample.name}
+                    />
+            )}
+        </div>
     );
 }
 

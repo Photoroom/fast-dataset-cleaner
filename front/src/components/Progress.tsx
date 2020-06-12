@@ -7,10 +7,12 @@ import { ProgressProps } from '../types/Annotation';
 
 type Props = {
     progress: ProgressProps;
+    handlePressLeft: any;
+    handlePressRight: any;
 } & WithStylesProps;
 
 function Progress(props: Props){
-    const { progress, css, styles } = props;
+    const { progress, handlePressLeft, handlePressRight, css, styles } = props;
     const { currentPage, numberImagesPerPage, totalImages } = progress;
 
     const firstIndex = totalImages > 0 ? currentPage * numberImagesPerPage + 1 : 0;
@@ -21,6 +23,10 @@ function Progress(props: Props){
         <div {...css(styles.progress)}>
             <h3 {...css(styles.title)}>Images {firstIndex}-{lastIndex} / {totalImages}</h3>
             <h3 {...css(styles.title)}>({pct}%)</h3>
+            <h3 {...css(styles.navigationArrows)}>
+                <div onClick={handlePressLeft} {...css(styles.arrow)}>⬅</div> |
+                <div onClick={handlePressRight} {...css(styles.arrow)}>⮕</div>
+            </h3>
         </div>
     );
 }
@@ -48,5 +54,15 @@ export default withStyles(({ unit, fontSize, color, speed, isNightMode }: PhotoR
     bannerHidden: {
         transform: 'scale(0.9)',
         opacity: 0,
+    },
+    arrow: {
+        display: 'inline-block',
+        margin: 2 * unit,
+        cursor: 'pointer',
+    },
+    navigationArrows: {
+        position: 'absolute',
+        display: 'inline-block',
+        top: 4.5 * unit,
     },
 }))(Progress);

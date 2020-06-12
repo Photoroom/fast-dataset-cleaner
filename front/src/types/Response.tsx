@@ -1,6 +1,7 @@
 export type ImageAnnotation = {
     id: string;
     image: string;
+    combination: string;
     index: number;
     value: boolean | string;
   };  

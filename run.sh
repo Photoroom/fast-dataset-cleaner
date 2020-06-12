@@ -1,4 +1,4 @@
-CSV_PATH=/home/shared/datasets/graphic_v3/trainset.csv
+CSV_PATH=/home/shared/datasets/graphic_v3/trainset_clean.csv
 ANNOTATED_SUFFIX=_annotated
 ANNOTATOR_COLUMN_NAME=annotator
 ANNOTATION_COLUMN_NAME=is_valid

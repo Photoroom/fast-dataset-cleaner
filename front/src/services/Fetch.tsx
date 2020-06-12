@@ -17,6 +17,7 @@ const formatImage = (image: ImageAnnotation) => ({
   id: image.index%getImgPerPage() + 1,
   sampleNumber: image.index,
   src: image.image,
+  combination: image.combination,
   value: typeof(image.value) == "string" ? true : image.value,
   name: image.id,
   annotated: image.value !== "None",

@@ -9,6 +9,7 @@ import HANDLE_KEY_PRESS, { useKeyboard } from './services/Keyboard';
 import HANDLE_HORIZONTAL_WHEEL, { useHorizontalWheel } from './services/Wheel';
 import { SampleType } from './types/Annotation';
 import FinalScreen from './components/FinalScreen';
+import Progress from './components/Progress';
 
 const HTTP_API = 'http://t2.artizans.ai:5000/api/';
 const NUMBER_IMAGES_PER_PAGE = parseInt(localStorage.getItem(imgPerPageLS) || '8');
@@ -77,12 +78,18 @@ function App(props: Props) {
         <SampleAnnotation 
           images={samples} 
           isBannerOpen={bannerOpen}
-          progress={fetchService.getProgress()}
           handleChangeValue={handleChangeValue}
           navigationDirection={navigationDirection}
         />
       ) : (
         <FinalScreen navigationDirection={navigationDirection} />
+      )}
+      {samples.length !== 0 && (
+        <Progress
+          progress={fetchService.getProgress()}
+          handlePressLeft={pressLeft}
+          handlePressRight={pressRight}
+        />
       )}
     </div>
   );
