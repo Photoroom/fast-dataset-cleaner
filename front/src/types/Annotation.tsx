@@ -1,7 +1,5 @@
 type SampleType = {
     id: number;
-    src: string;
-    combination: string;
     sampleNumber: number;
     value: boolean;
     name: string;

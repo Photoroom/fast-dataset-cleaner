@@ -1,8 +1,5 @@
 export default {
     getAnnotations: 'get-annotations',
+    getImage: 'get-image',
     annotate: 'annotate',
-    setDatasetCsv: 'set-dataset-csv',
-    setAnnotatorColumn: 'set-annotator-column',
-    setAnnotationColumn: 'set-annotation-column',
-    getColumns: 'get-columns',
 };

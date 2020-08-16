@@ -4,48 +4,49 @@ import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
 import Input from './elements/Input';
 import Separator from './elements/Separator';
 import Select from './elements/Select';
-
-
-const DEFAULT_ANNOT = '';
-const annotatorLS = 'annotator';
-export const getAnnotator = () => localStorage.getItem(annotatorLS);
-const setAnnotator = (annotator: string) => localStorage.setItem(annotatorLS, annotator);
-
-const DEFAULT_IMG_PER_PAGE = 8;
-export const imgPerPageLS = 'imagesPerPage';
-const OPTIONS_IMG_PER_PAGE = ["2", "4", "6", "8"];
-export const getImgPerPage = () => parseInt(localStorage.getItem(imgPerPageLS) || "8");
-const setImgPerPage = (imgsPerPage: string) => localStorage.setItem(imgPerPageLS, imgsPerPage);
-
-const DEFAULT_ANNOTOR_COLUMN = 'annotator';
-export const annotatorColumnLS = 'annotatorColumn';
-export const getAnnotatorColumn = () => localStorage.getItem(annotatorColumnLS);
-export const setAnnotatorColumn = (columnName: string) => localStorage.setItem(annotatorColumnLS, columnName);
-
-const DEFAULT_ANNOTION_COLUMN = 'is_valid';
-export const annotationColumnLS = 'annotationColumn';
-export const getAnnotationColumn = () => localStorage.getItem(annotationColumnLS);
-export const setAnnotationColumn = (columnName: string) => localStorage.setItem(annotationColumnLS, columnName);
-
-const DEFAULT_PASSWORD = '';
-export const shaLS = 'sha_pass';
-export const getSha = () => localStorage.getItem(shaLS);
-const setSha = (password: string) => localStorage.setItem(shaLS, password);
+import {
+    getAnnotator,
+    getImgPerPage,
+    getSha,
+    setAnnotator,
+    setImgPerPage,
+    setSha,
+    DEFAULT_IMG_PER_PAGE,
+    OPTIONS_IMG_PER_PAGE,
+    getDatasetPath,
+    setDatasetPath,
+    setImagesFolder,
+    setMasksFolder,
+    getImagesFolder,
+    getMasksFolder,
+    OPTIONS_USE_MASKS,
+    setUseMasks,
+    getUseMasks,
+    getIdColumnName,
+    setIdColumnName
+} from '../services/LocalStorage';
+import { getSharedUrl } from '../services/Location';
+import Button from './elements/Button';
 
 
 type Props = {
     isClicked: boolean;
-    postAnnotatorColumn: Function;
-    postAnnotationColumn: Function;
 } & WithStylesProps;
 
+function updateUrl() {
+    window.history.pushState(null, "Fast Dataset Cleaner", getSharedUrl());
+}
+
 function Banner(props: Props){
-    const { isClicked, postAnnotatorColumn, postAnnotationColumn, css, styles } = props;
-    const [annot, setAnnot] = useState(getAnnotator() || DEFAULT_ANNOT);
+    const { isClicked, css, styles } = props;
+    const [annot, setAnnot] = useState(getAnnotator() || '');
+    const [csv, setCsv] = useState(getDatasetPath() || '');
     const [imagesPerPage, setImagesPerPage] = useState(getImgPerPage() || DEFAULT_IMG_PER_PAGE);
-    const [annotatorCol, setAnnotatorCol] = useState(getAnnotatorColumn() || DEFAULT_ANNOTOR_COLUMN);
-    const [annotationCol, setAnnotationCol] = useState(getAnnotationColumn() || DEFAULT_ANNOTION_COLUMN);
-    const [shaPass, setShaPass] = useState(getSha() || DEFAULT_PASSWORD);
+    const [shaPass, setShaPass] = useState(getSha() || '');
+    const [imgFold, setImgFold] = useState(getImagesFolder() || '');
+    const [maskFold, setMaskFold] = useState(getMasksFolder() || '');
+    const [useMasks, setUseMasksValue] = useState(getUseMasks() || 'false');
+    const [idColumn, setIdColumn] = useState(getIdColumnName() || '');
 
     const handleChangeAnnotator = (e: any) => {
         const annotator = e.target.value;
@@ -57,27 +58,52 @@ function Banner(props: Props){
         const imgPerPage = e.target.value;
         setImgPerPage(imgPerPage);
         setImagesPerPage(imgPerPage);
+        updateUrl();
     };
-
-    const handleChangeAnnotatorColumn = (e: any) => {
-        const columnName = e.target.value;
-        setAnnotatorCol(columnName);
-        setAnnotatorColumn(columnName);
+    
+    const handleChangeCsv = (e: any) => {
+        const csvPath = e.target.value;
+        setDatasetPath(csvPath);
+        setCsv(csvPath);
+        updateUrl();
     };
-    const handleBlurAnnotatorColumn = (_: any) => postAnnotatorColumn();
-
-    const handleChangeAnnotationColumn = (e: any) => {
-        const columnName = e.target.value;
-        setAnnotationCol(columnName);
-        setAnnotationColumn(columnName);
-    };
-    const handleBlurAnnotationColumn = (_: any) => postAnnotationColumn();
     
     const handleChangeSha = (e: any) => {
         const password = e.target.value;
         setShaPass(password);
         setSha(password);
+        updateUrl();
     };
+
+    const handleChangeImagesFolder = (e: any) => {
+        const folder = e.target.value;
+        setImagesFolder(folder);
+        setImgFold(folder);
+        updateUrl();
+    };
+
+    const handleChangeMasksFolder = (e: any) => {
+        const folder = e.target.value;
+        setMasksFolder(folder);
+        setMaskFold(folder);
+        updateUrl();
+    };
+
+    const handleChangeUseMasks = (e: any) => {
+        const useMasksValue = e.target.value;
+        setUseMasksValue(useMasksValue);
+        setUseMasks(useMasksValue);
+        updateUrl();
+    };
+
+    const handleChangeIdColumnName = (e: any) => {
+        const name = e.target.value;
+        setIdColumn(name);
+        setIdColumnName(name);
+        updateUrl();
+    };
+
+    const handleClickButton = () => window.location.reload(false);
 
 
     return (
@@ -91,8 +117,20 @@ function Banner(props: Props){
             <Input
                 title="Password"
                 isHidden={!isClicked}
-                value={`${shaPass}`}
+                value={shaPass}
                 onChange={handleChangeSha}
+            />
+            <Input
+                title="CSV path"
+                isHidden={!isClicked}
+                value={csv}
+                onChange={handleChangeCsv}
+            />
+            <Input
+                title="Name of the id column"
+                isHidden={!isClicked}
+                value={idColumn}
+                onChange={handleChangeIdColumnName}
             />
             <Input
                 title="Annotator"
@@ -109,19 +147,28 @@ function Banner(props: Props){
                 onChange={handleChangeImgPerPage}
             />
             <Input
-                title="Annotator column"
+                title="Images folder"
                 isHidden={!isClicked}
-                value={annotatorCol}
-                onChange={handleChangeAnnotatorColumn}
-                onBlur={handleBlurAnnotatorColumn}
+                value={imgFold}
+                onChange={handleChangeImagesFolder}
             />
-            <Input
-                title="Annotation column"
+            <Select
+                title="Use masks"
+                name="use_masks" 
                 isHidden={!isClicked}
-                value={annotationCol}
-                onChange={handleChangeAnnotationColumn}
-                onBlur={handleBlurAnnotationColumn}
+                value={useMasks}
+                options={OPTIONS_USE_MASKS}
+                onChange={handleChangeUseMasks}
             />
+            {useMasks === 'true' && (
+                <Input
+                    title="Masks folder"
+                    isHidden={!isClicked}
+                    value={maskFold}
+                    onChange={handleChangeMasksFolder}
+                />
+            )}
+            <Button title="Get images" isHidden={!isClicked} handleClick={handleClickButton} />
         </div>
     );
 }

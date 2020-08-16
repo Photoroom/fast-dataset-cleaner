@@ -1,18 +1,15 @@
 export type ImageAnnotation = {
-    id: string;
-    image: string;
-    combination: string;
-    index: number;
-    value: boolean | string;
-  };  
+  id: string;
+  index: number;
+  value: boolean | string;
+};  
+
+type AnnotationsResponse = {
+  images?: ImageAnnotation[];
+  total?: number;
+  processed?: number;
+};
 
 export type GetAnnotationsResponse = {
-    images: ImageAnnotation[];
-    total: number;
-    processed: number;
-};
-
-export type GetColumnsResponse = {
-  annotator: string;
-  annotation: string;
-};
+  error?: string;
+} & AnnotationsResponse;

@@ -3,16 +3,17 @@ import './App.css';
 
 import SampleAnnotation from './components/SampleAnnotation';
 import Banner from './components/Banner';
-import { imgPerPageLS, getAnnotator, getAnnotationColumn, getAnnotatorColumn } from './components/BannerContent';
 import FetchService from './services/Fetch';
 import HANDLE_KEY_PRESS, { useKeyboard } from './services/Keyboard';
 import HANDLE_HORIZONTAL_WHEEL, { useHorizontalWheel } from './services/Wheel';
 import { SampleType } from './types/Annotation';
 import FinalScreen from './components/FinalScreen';
 import Progress from './components/Progress';
+import { getAnnotator, getImgPerPage, getDatasetPath, getIdColumnName, getSha } from './services/LocalStorage';
+import { readUrl } from './services/Location';
 
-const HTTP_API = 'http://t2.artizans.ai:5000/api/';
-const NUMBER_IMAGES_PER_PAGE = parseInt(localStorage.getItem(imgPerPageLS) || '8');
+const HTTP_API = 'http://t2.artizans.ai:36779/api/';
+const NUMBER_IMAGES_PER_PAGE = getImgPerPage();
 
 const fetchService = new FetchService({
   'api_address': HTTP_API,
@@ -29,7 +30,7 @@ type Props = {
 
 function App(props: Props) {
   const { nightMode, changeNightMode } = props
-  const [bannerOpen, setBannerOpen] = useState(!getAnnotator() || !getAnnotationColumn() || !getAnnotatorColumn());
+  const [bannerOpen, setBannerOpen] = useState(!getAnnotator() || !getDatasetPath() || !getIdColumnName() || !getSha());
   const [samples, setSamples] = useState<SampleType[]>([]);
   const [navigationDirection, setNavigationDirection] = useState('none');
 
@@ -39,6 +40,7 @@ function App(props: Props) {
   };
 
   useEffect(() => {
+    readUrl();
     fetchService.getAnnotations().finally(() => updateSamples('none'));
   }, []);
 
@@ -57,12 +59,6 @@ function App(props: Props) {
   const handleChangeValue = (value: boolean, index: number) =>
     fetchService.setValue(value, index);
 
-  const postAnnotatorColumn = () =>
-    fetchService.setAnnotatorColumn();
-
-  const postAnnotationColumn = () =>
-    fetchService.setAnnotationColumn();
-
 
   return (
     <div className="App">
@@ -71,8 +67,6 @@ function App(props: Props) {
         isBannerOpen={bannerOpen}
         nightMode={nightMode}
         changeNightMode={changeNightMode}
-        postAnnotatorColumn={postAnnotatorColumn}
-        postAnnotationColumn={postAnnotationColumn}
       />
       {samples.length !== 0 ? (
         <SampleAnnotation 
@@ -80,6 +74,7 @@ function App(props: Props) {
           isBannerOpen={bannerOpen}
           handleChangeValue={handleChangeValue}
           navigationDirection={navigationDirection}
+          fetchService={fetchService}
         />
       ) : (
         <FinalScreen navigationDirection={navigationDirection} />

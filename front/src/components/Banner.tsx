@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
 
-import PhotoRoomLogo from '../photoroom_logo.png';
+import PhotoRoomLogo from './photoroom_logo.png';
 import BannerContent from './BannerContent';
 import Overlay from './elements/Overlay';
 import Button from './elements/Button';
@@ -15,12 +15,10 @@ type Props = {
     handleBanner: Function;
     nightMode: boolean;
     changeNightMode: any;
-    postAnnotatorColumn: Function;
-    postAnnotationColumn: Function;
 } & WithStylesProps;
 
 function Banner(props: Props){
-    const { isBannerOpen, handleBanner, postAnnotatorColumn, postAnnotationColumn, nightMode, changeNightMode, css, styles } = props;
+    const { isBannerOpen, handleBanner, nightMode, changeNightMode, css, styles } = props;
 
     useEffect(() => {
         const handleKeyPress = (event: any) => {
@@ -62,12 +60,7 @@ function Banner(props: Props){
                     <Button title={titleDayNightMode} isHidden={!isBannerOpen} handleClick={changeNightMode} />
                 </div>
 
-                <BannerContent
-                    isClicked={isBannerOpen}
-                    postAnnotatorColumn={postAnnotatorColumn}
-                    postAnnotationColumn={postAnnotationColumn}
-                />
-                
+                <BannerContent isClicked={isBannerOpen} />
             </div>
             <Overlay isVisible={isBannerOpen} />
         </>
@@ -77,7 +70,7 @@ function Banner(props: Props){
 const unit = 8;
 const closeLogoSize = 8 * unit;
 const openLogoSize = 12 * unit;
-const closeBannerWidth = 11 * unit;
+export const closeBannerWidth = 11 * unit;
 const openBannerWidth = 42 * unit;
 export default withStyles(({ unit, color, speed }: PhotoRoomThemeType) => ({
     banner: {

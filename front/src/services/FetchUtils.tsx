@@ -1,4 +1,4 @@
-import { getSha } from "../components/BannerContent";
+import { getSha } from "./LocalStorage";
 
 const HEADERS_POST = {
     "accept": "application/json",

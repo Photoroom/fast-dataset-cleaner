@@ -2,19 +2,22 @@ import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 
 import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
-import Sample, { cardWidth } from './Sample';
+import Sample from './Sample';
 import { SampleType } from '../types/Annotation';
+import FetchService from '../services/Fetch';
+import { closeBannerWidth } from './Banner';
 
 type Props = {
     images: SampleType[];
     isBannerOpen: boolean;
+    fetchService: FetchService;
     navigationDirection: string;
     handleChangeValue: Function;
 } & WithStylesProps;
 
 function SampleAnnotation(props: Props) {
-    const { isBannerOpen, images, navigationDirection, handleChangeValue, css, styles } = props;
-
+    const { isBannerOpen, images, fetchService, navigationDirection, handleChangeValue, css, styles } = props;
+    
     return (
         <div {...css(styles.mainColumn)}>
             {images.map(
@@ -24,6 +27,7 @@ function SampleAnnotation(props: Props) {
                         isBannerOpen={isBannerOpen}
                         handleChangeValue={handleChangeValue}
                         navigationDirection={navigationDirection}
+                        fetchService={fetchService}
                         key={sample.name}
                     />
             )}
@@ -32,17 +36,17 @@ function SampleAnnotation(props: Props) {
 }
 
 const unit = 8;
-const sideMargin = `calc((100vw - 2 * ${cardWidth + 3 * unit + 2}px) / 2)`;
+export const mainColumnHeight = `calc(100vh - 2 * ${unit}px)`;
 export default withStyles(({ color, unit, speed }: PhotoRoomThemeType) => ({
     mainColumn: {
         background: color.page,
-        marginLeft: sideMargin,
-        marginRight: sideMargin,
-        paddingTop: 2 * unit,
-        paddingBottom: 2 * unit,
-        display: 'inline-flex',
+        marginLeft: closeBannerWidth + 2 * unit,
+        marginRight: 0,
+        paddingTop: unit,
+        paddingBottom: unit,
+        display: 'flex',
         flexWrap: 'wrap',
-        height: `calc(100vh - 2 * ${2 * unit}px)`,
+        height: mainColumnHeight,
         transition: `background ${speed.fast}s ease-in-out`,
     },
 }))(SampleAnnotation);

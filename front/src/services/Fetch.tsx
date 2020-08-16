@@ -1,23 +1,14 @@
-import { GetAnnotationsResponse, ImageAnnotation, GetColumnsResponse } from "../types/Response";
+import { GetAnnotationsResponse, ImageAnnotation } from "../types/Response";
 import { SampleType } from "../types/Annotation";
-import {
-  getAnnotator,
-  getAnnotatorColumn,
-  getAnnotationColumn,
-  getImgPerPage,
-  setAnnotationColumn as LSSetAnnotationColumn,
-  setAnnotatorColumn as LSSetAnnotatorColumn,
-  getSha,
-} from "../components/BannerContent";
 import Api from "./Api";
 import { makeBody } from "./FetchUtils";
+import { getImgPerPage, getSha, getAnnotator, getDatasetPath, getImagesFolder, getMasksFolder, getUseMasks, getIdColumnName } from "./LocalStorage";
+import { GetImageArgs } from "./Arguments";
 
 
 const formatImage = (image: ImageAnnotation) => ({
   id: image.index%getImgPerPage() + 1,
   sampleNumber: image.index,
-  src: image.image,
-  combination: image.combination,
   value: typeof(image.value) == "string" ? true : image.value,
   name: image.id,
   annotated: image.value !== "None",
@@ -101,16 +92,18 @@ class FetchService {
 
     treatNewData(data: GetAnnotationsResponse) {
       const { images, total, processed } = data;
-      this.images = images;
-      this.totalImages = total;
-      this.processedImages = processed;
-      if (processed < total) {
-        this.page = images.length !== 0 ? (images[0].index / getImgPerPage()) : this.page;
-      } else {
-        const lastPage = Math.ceil((total - 1) / getImgPerPage());
-        this.page = (images.length !== 0) ? this.page : lastPage;
+      if (images && total && processed !== undefined) {
+        this.images = images;
+        this.totalImages = total;
+        this.processedImages = processed;
+        if (processed < total) {
+          this.page = images.length !== 0 ? (images[0].index / getImgPerPage()) : this.page;
+        } else {
+          const lastPage = Math.ceil((total - 1) / getImgPerPage());
+          this.page = (images.length !== 0) ? this.page : lastPage;
+        }
+        this.samples = formatImages(images);
       }
-      this.samples = formatImages(images);
     }
 
 
@@ -123,15 +116,33 @@ class FetchService {
 
     getAnnotations = async () => {
       const first = this.firstLoading ? -1 : this.page * getImgPerPage();
-      const args = `first=${first}&offset=${getImgPerPage()}&sha=${getSha()}`;
-      return this.get(`${Api.getAnnotations}?${args}`)
+
+      const json = {
+        "first": first,
+        "offset": getImgPerPage(),
+        "sha": getSha(),
+        "csv_path": getDatasetPath(),
+        "images_folder": getImagesFolder(),
+        "masks_folder": getMasksFolder(),
+        "with_masks": getUseMasks() === 'true',
+        "id_column_name": getIdColumnName(),
+      };
+
+      return this.post(`${Api.getAnnotations}`, json)
         .then((data: GetAnnotationsResponse) => {
-          if (this.firstLoading) {
-            this.firstLoading = false;
+          if (data.error) {
+            alert(data.error);
+          } else {
+            if (this.firstLoading) {
+              this.firstLoading = false;
+            }
+            this.treatNewData(data);
           }
-          this.treatNewData(data);
         });
     }
+
+    getImage = (imageId: string) =>
+      `${this.api_address}${Api.getImage}?${GetImageArgs.ID}=${imageId}&${GetImageArgs.PASSWORD}=${getSha()}`;
 
 
     annotate = async () => {
@@ -141,42 +152,12 @@ class FetchService {
       const json = {
         "annotator": getAnnotator(),
         "annotations": annotations,
+        "sha": getSha(),
       };
 
       this.post(Api.annotate, json)
         .then(_ => {});
     }
-
-
-    setAnnotatorColumn = async () => {
-      const json = {
-        "annotator_column": getAnnotatorColumn(),
-      };
-
-      this.post(Api.setAnnotatorColumn, json)
-        .then(_ => {});
-    }
-
-
-    setAnnotationColumn = async () => {
-      const json = {
-        "annotation_column": getAnnotationColumn(),
-      };
-
-      this.post(Api.setAnnotationColumn, json)
-        .then(_ => {});
-    }
-
-
-    getColumns = async () => {
-      return this.get(`${Api.getColumns}?sha=${getSha()}`)
-        .then((data: GetColumnsResponse) => {
-          const { annotator, annotation } = data;
-            LSSetAnnotationColumn(annotation);
-            LSSetAnnotatorColumn(annotator);
-        });
-    }
-
 }
 
 export default FetchService;

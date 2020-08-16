@@ -5,24 +5,24 @@ import {useTransition, animated} from 'react-spring'
 import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
 import { SampleType } from '../types/Annotation';
 import { useKeyboard } from '../services/Keyboard';
-import { getImgPerPage } from './BannerContent';
+import { getImgPerPage } from '../services/LocalStorage';
+import FetchService from '../services/Fetch';
+import { closeBannerWidth } from './Banner';
 
 
 type Props = {
     sample: SampleType;
     isBannerOpen: boolean;
     navigationDirection: string;
+    fetchService: FetchService;
     handleChangeValue: Function;
 } & WithStylesProps;
 
 function Sample(props: Props){
-    const { isBannerOpen, sample, navigationDirection, handleChangeValue, css, styles } = props;
-    const { id, src, value, sampleNumber, annotated, changing, combination } = sample;
+    const { isBannerOpen, sample, navigationDirection, fetchService, handleChangeValue, css, styles } = props;
+    const { id, value, sampleNumber, annotated, changing, name } = sample;
 
     const [isValid, setIsValid] = useState(value);
-    const [hovered, setHovered] = useState(false);
-
-    const handleHover = () => setHovered(!hovered);
 
     useEffect(() => setIsValid(value), [value]);
 
@@ -32,22 +32,24 @@ function Sample(props: Props){
         return () => setInView(false);
     }, []);
 
-    const toggleValue = () => {
+    const toggleValue = useCallback(() => {
         handleChangeValue(!isValid, sampleNumber);
         setIsValid(!isValid);
-    }
+    }, [isValid, sampleNumber, handleChangeValue]);
 
     const handleKeyPress = useCallback((event: any) => {
         const keyPressed = event.key;
-        if (keyPressed == id && !isBannerOpen) {
+        if (parseInt(keyPressed) === id && !isBannerOpen) {
             toggleValue();
         }
-    }, [id, isBannerOpen, isValid, toggleValue]);
+    }, [id, isBannerOpen, toggleValue]);
 
     useKeyboard(handleKeyPress);
 
+    const unit = 8;
     const cardStyle = {
-        maxWidth: '40vw',
+        maxWidth: '45vw',
+        width: `calc((100vw - ${closeBannerWidth}px) / 2 - ${10 * unit}px)`,
         display: 'inline-block',
     };
     const translationInOut = `translateX(${navigationDirection === 'left' ? '-' : ''}100vw)`;
@@ -67,8 +69,6 @@ function Sample(props: Props){
                     <div
                         onClick={toggleValue}
                         onKeyDown={handleKeyPress}
-                        onMouseEnter={handleHover}
-                        onMouseLeave={handleHover}
                         {...css(
                             styles.card,
                             isValid ? styles.cardValid : styles.cardNotValid,
@@ -79,7 +79,7 @@ function Sample(props: Props){
                             <div {...css(styles.id)}>{id}</div>
                             {annotated && <div {...css(styles.annotated)}>{isValid ? '✔' : '✘'}</div>}
                         </div>
-                        <img src={hovered ? combination : src} alt="source" {...css(styles.image)} />
+                        <img src={fetchService.getImage(name)} alt="source" {...css(styles.image)} />
                     </div>
                 </animated.div>
                 )
@@ -90,16 +90,16 @@ function Sample(props: Props){
 
 
 const unit = 8;
-export const cardWidth = 90 * unit;
-const maxHeightCardContent = `calc(100vh / ${getImgPerPage() / 2} - ${5 * unit}px)`;
+export const cardWidth = 95 * unit;
+const maxHeightCardContent = `calc(100vh / ${getImgPerPage() / 2} - ${2 * unit}px)`;
 export default withStyles(({ unit, color, speed, fontSize }: PhotoRoomThemeType) => ({
     card: {
-        width: cardWidth,
+        maxHeight: `calc(100vh / ${getImgPerPage() / 2})`,
         border: '1px solid #ccc',
         borderRadius: 3 * unit,
-        margin: 1.5 * unit,
-        maxHeight: `calc(100vh / ${getImgPerPage() / 2})`,
-        minHeight: `calc((100vh - ${4 * unit + 3 * unit}px) / ${getImgPerPage() / 2} - ${3 * unit}px)`,
+        margin: `${0.5 * unit}px ${1 * unit}px`,
+        height: `calc(100% - 2 * ${0.75 * unit}px)`,
+        minHeight: `calc((100vh - ${4 * unit + 2 * unit}px) / ${getImgPerPage() / 2} - ${1 * unit}px)`,
         transition:
             `background ${speed.fast}s ease,
             box-shadow ${speed.fast}s ease,
@@ -139,5 +139,6 @@ export default withStyles(({ unit, color, speed, fontSize }: PhotoRoomThemeType)
         height: '100%',
         marginLeft: 5 * unit,
         maxHeight: maxHeightCardContent,
+        maxWidth: `calc(100% - ${5 * unit + 2 * unit}px)`,
     },
 }))(Sample);

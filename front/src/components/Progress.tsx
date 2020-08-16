@@ -24,7 +24,12 @@ function Progress(props: Props){
             <h3 {...css(styles.title)}>Images {firstIndex}-{lastIndex} / {totalImages}</h3>
             <h3 {...css(styles.title)}>({pct}%)</h3>
             <h3 {...css(styles.navigationArrows)}>
-                <div onClick={handlePressLeft} {...css(styles.arrow)}>⬅</div> |
+                {currentPage > 0 && (
+                    <>
+                        <div onClick={handlePressLeft} {...css(styles.arrow)}>⬅</div>
+                        <div {...css(styles.arrow)}>|</div>
+                    </>
+                )}
                 <div onClick={handlePressRight} {...css(styles.arrow)}>⮕</div>
             </h3>
         </div>
@@ -35,6 +40,7 @@ export default withStyles(({ unit, fontSize, color, speed, isNightMode }: PhotoR
     title: {
         marginBlockStart: unit,
         marginBlockEnd: unit,
+        textAlign: 'right',
     },
     progress: {
         position: 'absolute',
@@ -57,7 +63,7 @@ export default withStyles(({ unit, fontSize, color, speed, isNightMode }: PhotoR
     },
     arrow: {
         display: 'inline-block',
-        margin: 2 * unit,
+        margin: `${2 * unit}px ${0.25 * unit}px`,
         cursor: 'pointer',
     },
     navigationArrows: {
