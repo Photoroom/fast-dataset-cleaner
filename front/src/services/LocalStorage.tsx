@@ -1,5 +1,5 @@
 const getLSValue = (key: string) => localStorage.getItem(key);
-const setLSValue = (key: string, value: string) => localStorage.setItem(key, value);
+const setLSValue = (key: string, value: string) => localStorage.setItem(key, value.trim());
 
 
 const annotatorLS = 'annotator';
@@ -14,7 +14,7 @@ export const setImgPerPage = (imgsPerPage: string) => setLSValue(imgPerPageLS, i
 
 const shaLS = 'sha_pass';
 export const getSha = () => getLSValue(shaLS);
-export const setSha = (password: string) => setLSValue(shaLS, password.trim());
+export const setSha = (password: string) => setLSValue(shaLS, password);
 
 const datasetPathLS = 'datasetPath';
 export const getDatasetPath = () => getLSValue(datasetPathLS);
@@ -36,3 +36,11 @@ export const setUseMasks = (useMasks: string) => setLSValue(useMasksLS, useMasks
 const idColumnNameLS = 'idColumnName';
 export const getIdColumnName = () => getLSValue(idColumnNameLS);
 export const setIdColumnName = (name: string) => setLSValue(idColumnNameLS, name);
+
+const extensionImagesLS = 'imagesExtension';
+export const getImagesExtension = () => getLSValue(extensionImagesLS);
+export const setImagesExtension = (ext: string) => setLSValue(extensionImagesLS, ext);
+
+const extensionMasksLS = 'masksExtension';
+export const getMasksExtension = () => getLSValue(extensionMasksLS);
+export const setMasksExtension = (ext: string) => setLSValue(extensionMasksLS, ext);

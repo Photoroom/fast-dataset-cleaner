@@ -92,8 +92,8 @@ export default withStyles(({ unit, color, speed }: PhotoRoomThemeType) => ({
     logoClicked: {
         transform: 'rotate(720deg)',
         height: openLogoSize,
-        left: 4 * unit,
-        top: 4 * unit,
+        left: 3 * unit,
+        top: 3 * unit,
     },
     logoNotClicked: {
         transform: 'rotate(0deg)',
@@ -111,7 +111,7 @@ export default withStyles(({ unit, color, speed }: PhotoRoomThemeType) => ({
     nightButton: {
         position: 'fixed',
         left: 6 * unit + openLogoSize,
-        top: openLogoSize,
+        top: openLogoSize - unit,
         width: `calc(${openBannerWidth - openLogoSize - 6 * unit - 5 * unit}px)`,
         padding: `0 ${unit}px`,
         opacity: 1,

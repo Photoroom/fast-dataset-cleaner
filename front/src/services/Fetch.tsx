@@ -2,7 +2,7 @@ import { GetAnnotationsResponse, ImageAnnotation } from "../types/Response";
 import { SampleType } from "../types/Annotation";
 import Api from "./Api";
 import { makeBody } from "./FetchUtils";
-import { getImgPerPage, getSha, getAnnotator, getDatasetPath, getImagesFolder, getMasksFolder, getUseMasks, getIdColumnName } from "./LocalStorage";
+import { getImgPerPage, getSha, getAnnotator, getDatasetPath, getImagesFolder, getMasksFolder, getUseMasks, getIdColumnName, getImagesExtension, getMasksExtension } from "./LocalStorage";
 import { GetImageArgs } from "./Arguments";
 
 
@@ -126,6 +126,8 @@ class FetchService {
         "masks_folder": getMasksFolder(),
         "with_masks": getUseMasks() === 'true',
         "id_column_name": getIdColumnName(),
+        "image_ext": getImagesExtension(),
+        "mask_ext": getMasksExtension(),
       };
 
       return this.post(`${Api.getAnnotations}`, json)

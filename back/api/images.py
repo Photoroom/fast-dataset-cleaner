@@ -22,16 +22,13 @@ def build_image(img_path, mask_path=None):
 
 def compose_img(img, mask):    
     bg = np.zeros_like(img)
-    bg[:,:,1] = 255
-    
-    if (np.max(mask) > 1):
-        mask = mask / 255
+    bg[:,:,1] = 1.0
 
     mask = cv2.resize(mask, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_CUBIC)
     mask, img = mask / 255, img / 255
     fg = mask * img
     bg = (1-mask) * bg
-    cutout = np.array(fg + bg, dtype=np.uint8)
+    cutout = np.array(255 * (fg + bg), dtype=np.uint8)
     
     return cutout
 

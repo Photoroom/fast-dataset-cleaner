@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
 import Input from './elements/Input';
@@ -23,7 +23,11 @@ import {
     setUseMasks,
     getUseMasks,
     getIdColumnName,
-    setIdColumnName
+    setIdColumnName,
+    setImagesExtension,
+    getImagesExtension,
+    getMasksExtension,
+    setMasksExtension
 } from '../services/LocalStorage';
 import { getSharedUrl } from '../services/Location';
 import Button from './elements/Button';
@@ -46,7 +50,15 @@ function Banner(props: Props){
     const [imgFold, setImgFold] = useState(getImagesFolder() || '');
     const [maskFold, setMaskFold] = useState(getMasksFolder() || '');
     const [useMasks, setUseMasksValue] = useState(getUseMasks() || 'false');
-    const [idColumn, setIdColumn] = useState(getIdColumnName() || '');
+    const [idColumn, setIdColumn] = useState(getIdColumnName() || 'id');
+    const [imgExt, setImgExt] = useState(getImagesExtension() || '');
+    const [masksExt, setMasksExt] = useState(getMasksExtension() || '');
+
+    useEffect(() => {
+        if (!getIdColumnName()) {
+            setIdColumnName('id');
+        }
+    }, []);
 
     const handleChangeAnnotator = (e: any) => {
         const annotator = e.target.value;
@@ -103,8 +115,23 @@ function Banner(props: Props){
         updateUrl();
     };
 
+    const handleChangeImagesExtension = (e: any) => {
+        const extension = e.target.value;
+        setImgExt(extension);
+        setImagesExtension(extension);
+        updateUrl();
+    };
+
+    const handleChangeMasksExtension = (e: any) => {
+        const extension = e.target.value;
+        setMasksExt(extension);
+        setMasksExtension(extension);
+        updateUrl();
+    };
+
     const handleClickButton = () => window.location.reload(false);
 
+    const InputBanner = useCallback((props: any) => <Input isHidden={!isClicked} {...props} />, [isClicked]);
 
     return (
         <div
@@ -114,27 +141,35 @@ function Banner(props: Props){
             )}
         >
             {isClicked && <Separator />}
-            <Input
+            <InputBanner
                 title="Password"
-                isHidden={!isClicked}
                 value={shaPass}
                 onChange={handleChangeSha}
             />
-            <Input
+            <InputBanner
+                displayInputValue
                 title="CSV path"
-                isHidden={!isClicked}
                 value={csv}
                 onChange={handleChangeCsv}
             />
-            <Input
+            <InputBanner
                 title="Name of the id column"
-                isHidden={!isClicked}
                 value={idColumn}
                 onChange={handleChangeIdColumnName}
             />
-            <Input
+            <InputBanner
+                displayInputValue
+                title="Images folder"
+                value={imgFold}
+                onChange={handleChangeImagesFolder}
+            />
+            <InputBanner
+                title="Images extension"
+                value={imgExt}
+                onChange={handleChangeImagesExtension}
+            />
+            <InputBanner
                 title="Annotator"
-                isHidden={!isClicked}
                 value={annot}
                 onChange={handleChangeAnnotator}
             />
@@ -146,12 +181,6 @@ function Banner(props: Props){
                 options={OPTIONS_IMG_PER_PAGE}
                 onChange={handleChangeImgPerPage}
             />
-            <Input
-                title="Images folder"
-                isHidden={!isClicked}
-                value={imgFold}
-                onChange={handleChangeImagesFolder}
-            />
             <Select
                 title="Use masks"
                 name="use_masks" 
@@ -161,27 +190,38 @@ function Banner(props: Props){
                 onChange={handleChangeUseMasks}
             />
             {useMasks === 'true' && (
-                <Input
-                    title="Masks folder"
-                    isHidden={!isClicked}
-                    value={maskFold}
-                    onChange={handleChangeMasksFolder}
-                />
+                <>
+                    <InputBanner
+                        displayInputValue
+                        title="Masks folder"
+                        value={maskFold}
+                        onChange={handleChangeMasksFolder}
+                    />
+                    <InputBanner
+                        title="Masks extension"
+                        value={masksExt}
+                        onChange={handleChangeMasksExtension}
+                    />
+                </>
             )}
             <Button title="Get images" isHidden={!isClicked} handleClick={handleClickButton} />
         </div>
     );
 }
 
+const unit = 8;
+const bannerContentSideMargin = 3 * unit;
 export default withStyles(({ unit, speed }: PhotoRoomThemeType) => ({
     bannerContent: {
         width: 0,
-        margin: 4 * unit,
-        marginTop : 20 * unit,
+        margin: bannerContentSideMargin,
+        marginTop : 19 * unit,
         zIndex: 2,
+        overflowY: 'auto',
+        maxHeight: '84vh',
         transition: `width ${speed.fast}s ease-in-out`,
     },
     bannerOpen: {
-        width: `calc(100% - 8 * ${unit}px)`,
+        width: `calc(100% - 2 * ${bannerContentSideMargin}px)`,
     },
 }))(Banner);

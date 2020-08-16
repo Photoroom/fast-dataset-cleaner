@@ -21,7 +21,7 @@ function Progress(props: Props){
     
     return (
         <div {...css(styles.progress)}>
-            <h3 {...css(styles.title)}>Images {firstIndex}-{lastIndex} / {totalImages}</h3>
+            <h3 {...css(styles.title)}>{firstIndex}-{lastIndex} / {totalImages}</h3>
             <h3 {...css(styles.title)}>({pct}%)</h3>
             <h3 {...css(styles.navigationArrows)}>
                 {currentPage > 0 && (

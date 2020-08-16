@@ -17,7 +17,7 @@ type Props = {
 
 function SampleAnnotation(props: Props) {
     const { isBannerOpen, images, fetchService, navigationDirection, handleChangeValue, css, styles } = props;
-    
+
     return (
         <div {...css(styles.mainColumn)}>
             {images.map(

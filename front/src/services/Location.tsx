@@ -12,7 +12,11 @@ import {
     setImagesFolder,
     setMasksFolder,
     setUseMasks,
-    setIdColumnName
+    setIdColumnName,
+    getImagesExtension,
+    getMasksExtension,
+    setImagesExtension,
+    setMasksExtension
 } from "./LocalStorage";
 
 enum UrlArgs {
@@ -23,6 +27,8 @@ enum UrlArgs {
     MASKS_FOLDER = 'masksFolder',
     USE_MASKS = 'useMasks',
     ID_COLUMN = 'idColumn',
+    IMAGES_EXTENSION = 'imgExt',
+    MASKS_EXTENSION = 'maskExt',
 };
 
 const createSharedUrlArgs = () => {
@@ -34,6 +40,8 @@ const createSharedUrlArgs = () => {
     const masksFolder = getMasksFolder();
     const useMasks = getUseMasks();
     const idColumn = getIdColumnName();
+    const imgExt = getImagesExtension();
+    const masksExt = getMasksExtension();
 
     if (csv) {
         args.push(`${UrlArgs.CSV_PATH}=${csv}`);
@@ -52,6 +60,12 @@ const createSharedUrlArgs = () => {
     }
     if (useMasks === 'True' && masksFolder) {
         args.push(`${UrlArgs.MASKS_FOLDER}=${masksFolder}`);
+    }
+    if (imgExt) {
+        args.push(`${UrlArgs.IMAGES_EXTENSION}=${imgExt}`);
+    }
+    if (masksExt) {
+        args.push(`${UrlArgs.MASKS_EXTENSION}=${masksExt}`);
     }
     if (sha) {
         args.push(`${UrlArgs.PASSWORD}=${sha}`);
@@ -86,4 +100,6 @@ export const readUrl = () => {
     setLSFromUrl(currentUrl, UrlArgs.MASKS_FOLDER, setMasksFolder);
     setLSFromUrl(currentUrl, UrlArgs.USE_MASKS, setUseMasks);
     setLSFromUrl(currentUrl, UrlArgs.ID_COLUMN, setIdColumnName);
+    setLSFromUrl(currentUrl, UrlArgs.IMAGES_EXTENSION, setImagesExtension);
+    setLSFromUrl(currentUrl, UrlArgs.MASKS_EXTENSION, setMasksExtension);
 }

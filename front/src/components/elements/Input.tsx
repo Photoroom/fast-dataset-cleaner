@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
 
@@ -7,12 +7,23 @@ type Props = {
     title: string;
     isHidden: boolean;
     value: string | null;
+    displayInputValue?: boolean;
     onChange?: any;
     onBlur?: any;
 } & WithStylesProps;
 
 function Input(props: Props){
-    const { title, isHidden, value, onChange, onBlur, css, styles } = props;
+    const { title, isHidden, value, displayInputValue, onChange, onBlur, css, styles } = props;
+    
+    const [valueInput, setValueInput] = useState(value === null ? '' : value);
+
+    const onChangeInput = (e: any) => {
+        const inputValue = e.target.value;
+        setValueInput(inputValue);
+        if (onChange) {
+            onChange(e);
+        }
+    }
     
     return (
         <div
@@ -21,8 +32,17 @@ function Input(props: Props){
                 isHidden && styles.bannerHidden
             )}
         >
-            <h3 {...css(styles.titleInput)}>{title}</h3>
-            <input type="text" value={value || ''} onChange={onChange} onBlur={onBlur} {...css(styles.inputArea)}/>
+            {title && <h3 {...css(styles.titleInput)}>{title}</h3>}
+            {displayInputValue && (
+                <h3 {...css(styles.displayedValueInput)}>{valueInput}</h3>
+            )}
+            <input
+                type="text"
+                value={value || ''}
+                onChange={onChangeInput}
+                onBlur={onBlur}
+                {...css(styles.inputArea)}
+            />
         </div>
     );
 }
@@ -60,5 +80,15 @@ export default withStyles(({ unit, fontSize, fontFamily, color, speed }: PhotoRo
     bannerHidden: {
         transform: 'scale(0.9)',
         opacity: 0,
+    },
+    displayedValueInput: {
+        color: color.bannerText,
+        textAlign: 'left',
+        fontSize: fontSize.medium,
+        marginBlockEnd: 1.5 * unit,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        // maxHeight: 2 * fontSize.large + 0.5 * unit,
+        'line-break': 'anywhere',
     },
 }))(Input);

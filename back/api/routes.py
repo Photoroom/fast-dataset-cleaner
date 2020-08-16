@@ -1,26 +1,21 @@
 import os
-import math
 
 from flask import Flask, request, send_file
 from flask_restx import Resource
 import pandas as pd
-import numpy as np
 import io
 from PIL import Image
 
 from . import api, utils
 from .images import build_image
+from .dataframe import get_images_from_rows, get_first_index_not_fully_annotated_page, create_annotated_csv, annotate_df
+from .constants import ANNOTATION_COLUMN, ANNOTATED_SUFFIX, PASSWORD_ERROR
 
-
-ANNOTATION_COLUMN = 'fast_dataset_cleaner_label'
-ANNOTATOR_COLUMN = 'annotator'
 
 SHA_HASH = utils.sha_generator()
 utils.print_important(f"Password to add in the frontend options:", important_msg=SHA_HASH)
-PASSWORD_ERROR = 'Missing or wrong password'
 
 
-ANNOTATED_SUFFIX = '_annotated'
 def get_annotated_csv_path(csv_path):
     return utils.get_annotated_csv_path(csv_path, ANNOTATED_SUFFIX)
 
@@ -35,28 +30,8 @@ IMAGES_FOLDER = None
 MASKS_FOLDER = None
 WITH_MASKS = False
 ID_COLUMN = None
-
-
-def get_images_from_rows(selected_rows):
-    images = []
-    for ind, row in selected_rows.iterrows():
-        images.append({
-            'id': row[ID_COLUMN],
-            'index': ind,
-            'value': row[ANNOTATION_COLUMN] if not math.isnan(row[ANNOTATION_COLUMN]) else 'None'
-        })
-    return images
-
-
-def get_first_index_not_fully_annotated_page(offset):
-    global df
-    df_not_annotated = df[df[ANNOTATION_COLUMN].isna()]
-    if len(df_not_annotated) == 0:
-        return len(df)
-    first_not_annotated = df[df[ANNOTATION_COLUMN].isna()].iloc[0]
-    first_index = df[df[ID_COLUMN] == first_not_annotated[ID_COLUMN]].index[0]
-    start = int(offset * np.floor(first_index / offset))
-    return start
+IMAGE_EXTENSION = None
+MASK_EXTENSION = None
 
 
 def send_numpy_image(image):
@@ -79,6 +54,8 @@ class GetAnnotations(Resource):
         global MASKS_FOLDER
         global WITH_MASKS
         global ID_COLUMN
+        global IMAGE_EXTENSION
+        global MASK_EXTENSION
         
         body = request.json
 
@@ -90,6 +67,8 @@ class GetAnnotations(Resource):
         masks_folder = body['masks_folder'] if 'masks_folder' in body else None
         with_masks = body['with_masks'] if 'with_masks' in body else False
         id_column = body['id_column_name'] if 'id_column_name' in body else None
+        image_ext = body['image_ext'] if 'image_ext' in body else None
+        mask_ext = body['mask_ext'] if 'mask_ext' in body else None
         
         if sha_hash != SHA_HASH:
             return { 'error': PASSWORD_ERROR }, 200
@@ -100,13 +79,25 @@ class GetAnnotations(Resource):
 
         if os.path.exists(csv_annotated):
             df = pd.read_csv(csv_annotated)
+        elif os.path.exists(csv_path):
+            df = create_annotated_csv(csv_path, csv_annotated)
         else:
-            return { 'error_df': f'Missing csv: {csv_annotated}' }, 200
+            return { 'error': f'CSVs not found: {csv_path} and {csv_annotated}' }, 200
         
+        if id_column is None or id_column not in df:
+            return { 'error': f'Column {id_column} not in the csv.' }, 200
+        if id_column != ID_COLUMN:
+            ID_COLUMN = id_column
+            
+        if image_ext is not None and image_ext != IMAGE_EXTENSION:
+            IMAGE_EXTENSION = image_ext
+        if mask_ext is not None and mask_ext != MASK_EXTENSION:
+            MASK_EXTENSION = mask_ext
+        
+        if not os.path.exists(images_folder):
+            return { 'error': f'Images folder not found: {images_folder}' }, 200
         if images_folder[-1] != '/':
             images_folder += '/'
-        if not os.path.exists(images_folder):
-            return { 'error_images_folder': f'Missing images folder: {images_folder}' }, 200
         if images_folder != IMAGES_FOLDER:
             IMAGES_FOLDER = images_folder
             
@@ -114,26 +105,19 @@ class GetAnnotations(Resource):
             if masks_folder[-1] != '/':
                 masks_folder += '/'
             if not os.path.exists(masks_folder):
-                return { 'error_masks_folder': f'Missing masks folder: {masks_folder}' }, 200
+                return { 'error': f'Masks folder not found: {masks_folder}' }, 200
             if masks_folder != MASKS_FOLDER:
                 MASKS_FOLDER = masks_folder
                 WITH_MASKS = with_masks
-                
-        if id_column is None or id_column not in df:
-            return { 'error_id_column': f'Column {id_column} not in the csv.' }, 200
-        if id_column != ID_COLUMN:
-            ID_COLUMN = id_column
 
         if first == -1:
-            first = get_first_index_not_fully_annotated_page(offset)
+            first = get_first_index_not_fully_annotated_page(df, offset, ID_COLUMN)
         selected_rows = df[first: first + offset]
-        images = get_images_from_rows(selected_rows)
-
-        processed = len(df[~df[ANNOTATION_COLUMN].isna()])
+        images = get_images_from_rows(selected_rows, ID_COLUMN)
 
         return {
             'images': images,
-            'processed': processed,
+            'processed': len(df[~df[ANNOTATION_COLUMN].isna()]),
             'total': len(df)
             }, 200
         
@@ -148,10 +132,10 @@ class GetImage(Resource):
             return { 'error': PASSWORD_ERROR }, 200
 
         if image_id == '':
-            return { 'error': 'Provide an image index' }, 200
+            return { 'error': 'Provide an image id' }, 200
 
-        image_path = f'{IMAGES_FOLDER}{image_id}' #.png
-        mask_path = f'{MASKS_FOLDER}{image_id}' if WITH_MASKS else None
+        image_path = f'{IMAGES_FOLDER}{image_id}{IMAGE_EXTENSION}'
+        mask_path = f'{MASKS_FOLDER}{image_id}{MASK_EXTENSION}' if WITH_MASKS else None
         
         return send_numpy_image(build_image(image_path, mask_path))
         
@@ -167,11 +151,6 @@ class Annotate(Resource):
         if sha_hash != SHA_HASH:
             return { 'error': PASSWORD_ERROR }, 200
         
-        df = pd.read_csv(csv_annotated)
-        
-        for idx, is_valid in annotations.items():
-            df.loc[df[ID_COLUMN] == idx, ANNOTATOR_COLUMN] = annotator
-            df.loc[df[ID_COLUMN] == idx, ANNOTATION_COLUMN] = is_valid
-        df.to_csv(csv_annotated, index=False)
+        df = annotate_df(df, annotations, annotator, ID_COLUMN, csv_annotated)
         
         return { 'msg': 'Annotation done!' }, 200

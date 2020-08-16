@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { throttle } from "lodash";
 
-const THRESHOLD_X = 15;
+const THRESHOLD_X = 10;
 const THRESHOLD_Y = 5;
 const THROTTLE_WAIT = 320;
 
 const HANDLE_HORIZONTAL_WHEEL = (e: Event, wheelLeft: Function, wheelRight: Function) => {
     // @ts-ignore
     const { deltaX, deltaY } = e;
-    if (Math.abs(deltaX) > THRESHOLD_X && Math.abs(deltaY) <= THRESHOLD_Y) {
+    // @ts-ignore
+    const isPageZoomed = window.visualViewport.scale !== 1;
+    if (!isPageZoomed && Math.abs(deltaX) > THRESHOLD_X && Math.abs(deltaY) <= THRESHOLD_Y) {
         deltaX > 0 ? wheelRight() : wheelLeft();
     }
 }

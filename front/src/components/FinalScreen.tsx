@@ -3,6 +3,7 @@ import { withStyles, WithStylesProps } from 'react-with-styles';
 import {useTransition, animated} from 'react-spring'
 
 import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
+import Button from './elements/Button';
 
 
 const design = 
@@ -17,20 +18,23 @@ const design =
 
 const text =
 "🎊🎉👏 Congratulations! 👏🎉🎊 \n\n" +
-"You got to the end of your dataset!\n\n" +
+"You reached the end of your dataset!\n\n" +
 "Refresh the page to be sure that you annotated all the images.\n\n" +
-" If after a refresh you got here, you're good to go on ! 🏋💻";
+" If after a refresh you get here, you're good to go on ! 🏋💻";
 
 
 type Props = {
     navigationDirection: string;
 } & WithStylesProps;
 
-
+const handleClickButton = () => window.location.reload(false);
 const Screen = ({ css, styles }: WithStylesProps) => (
     <div {...css(styles.card)}>
         <p {...css(styles.paragraph)}>{design}</p>
         <p>{text}</p>
+        <div {...css(styles.reloadButton)}>
+            <Button title="Reload the page" isHidden={false} handleClick={handleClickButton} />
+        </div>
     </div>
 );
 
@@ -81,5 +85,9 @@ export default withStyles(({ unit, color, fontSize }: PhotoRoomThemeType) => ({
     },
     paragraph: {
         margin: `${4 * unit}px 0`,
-    }
+    },
+    reloadButton: {
+        width: '20%',
+        margin: 'auto',
+    },
 }))(FinalScreen);
