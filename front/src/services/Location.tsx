@@ -58,7 +58,7 @@ const createSharedUrlArgs = () => {
     if (useMasks) {
         args.push(`${UrlArgs.USE_MASKS}=${useMasks}`);
     }
-    if (useMasks === 'True' && masksFolder) {
+    if (useMasks?.toLowerCase() === 'true' && masksFolder) {
         args.push(`${UrlArgs.MASKS_FOLDER}=${masksFolder}`);
     }
     if (imgExt) {
