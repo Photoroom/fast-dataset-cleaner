@@ -22,10 +22,12 @@ function Select(props: Props){
                 isHidden && styles.bannerHidden
             )}
         >
-            <h3 {...css(styles.titleInput)}>{title}</h3>
-            <select name={name} value={value || ''} onChange={onChange} {...css(styles.select)}>
-                {options.map(option => <option key={option} value={option}>{option}</option>)}
-            </select>
+            <label>
+                <h3 {...css(styles.titleInput)}>{title}</h3>
+                <select name={name} value={value || ''} onChange={onChange} {...css(styles.select)}>
+                    {options.map(option => <option key={option} value={option}>{option}</option>)}
+                </select>
+            </label>
         </div>
     );
 }

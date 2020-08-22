@@ -29,17 +29,19 @@ import {
     getMasksExtension,
     setMasksExtension
 } from '../services/LocalStorage';
-import { getSharedUrl } from '../services/Location';
+import { updateUrl } from '../services/Location';
 import Button from './elements/Button';
+import Section from './elements/Section';
+import TextDisplay from './elements/TextDisplay';
 
+
+const FOLDER_PLACEHOLDER = '/path/to/folder/';
+export const handleClickGetImages = () => window.location.reload(false);
 
 type Props = {
     isClicked: boolean;
 } & WithStylesProps;
 
-function updateUrl() {
-    window.history.pushState(null, "Fast Dataset Cleaner", getSharedUrl());
-}
 
 function Banner(props: Props){
     const { isClicked, css, styles } = props;
@@ -129,9 +131,8 @@ function Banner(props: Props){
         updateUrl();
     };
 
-    const handleClickButton = () => window.location.reload(false);
-
     const InputBanner = useCallback((props: any) => <Input isHidden={!isClicked} {...props} />, [isClicked]);
+    const SectionBanner = useCallback((props: any) => <Section isHidden={!isClicked} {...props} />, [isClicked]);
 
     return (
         <div
@@ -141,70 +142,79 @@ function Banner(props: Props){
             )}
         >
             {isClicked && <Separator />}
-            <InputBanner
-                title="Password"
-                value={shaPass}
-                onChange={handleChangeSha}
-            />
-            <InputBanner
-                displayInputValue
-                title="CSV path"
-                value={csv}
-                onChange={handleChangeCsv}
-            />
-            <InputBanner
-                title="Name of the id column"
-                value={idColumn}
-                onChange={handleChangeIdColumnName}
-            />
-            <InputBanner
-                displayInputValue
-                title="Images folder"
-                value={imgFold}
-                onChange={handleChangeImagesFolder}
-            />
-            <InputBanner
-                title="Images extension"
-                value={imgExt}
-                onChange={handleChangeImagesExtension}
-            />
-            <InputBanner
-                title="Annotator"
-                value={annot}
-                onChange={handleChangeAnnotator}
-            />
-            <Select
-                title="Images per page"
-                name="img_per_page" 
-                isHidden={!isClicked}
-                value={imagesPerPage.toString()}
-                options={OPTIONS_IMG_PER_PAGE}
-                onChange={handleChangeImgPerPage}
-            />
-            <Select
-                title="Use masks"
-                name="use_masks" 
-                isHidden={!isClicked}
-                value={useMasks}
-                options={OPTIONS_USE_MASKS}
-                onChange={handleChangeUseMasks}
-            />
-            {useMasks === 'true' && (
-                <>
-                    <InputBanner
-                        displayInputValue
-                        title="Masks folder"
-                        value={maskFold}
-                        onChange={handleChangeMasksFolder}
-                    />
-                    <InputBanner
-                        title="Masks extension"
-                        value={masksExt}
-                        onChange={handleChangeMasksExtension}
-                    />
-                </>
-            )}
-            <Button title="Get images" isHidden={!isClicked} handleClick={handleClickButton} />
+            <SectionBanner title="Password">
+                <InputBanner
+                    value={shaPass}
+                    onChange={handleChangeSha}
+                />
+            </SectionBanner>
+            <SectionBanner title="About the CSV">
+                <InputBanner
+                    displayInputValue
+                    title="CSV path"
+                    value={csv}
+                    onChange={handleChangeCsv}
+                />
+                <InputBanner
+                    title="Name of the id column"
+                    value={idColumn}
+                    onChange={handleChangeIdColumnName}
+                />
+            </SectionBanner>
+            <SectionBanner title="Images">
+                <TextDisplay text={`${imgFold || FOLDER_PLACEHOLDER}{id}${imgExt}`} />
+                <InputBanner
+                    title="Images folder"
+                    value={imgFold}
+                    onChange={handleChangeImagesFolder}
+                />
+                <InputBanner
+                    title="Images extension"
+                    value={imgExt}
+                    onChange={handleChangeImagesExtension}
+                />
+            </SectionBanner>
+            <SectionBanner title="Masks">
+                <Select
+                    title="Use masks"
+                    name="use_masks" 
+                    isHidden={!isClicked}
+                    value={useMasks}
+                    options={OPTIONS_USE_MASKS}
+                    onChange={handleChangeUseMasks}
+                />
+                {useMasks === 'true' && (
+                    <>
+                        <TextDisplay text={`${maskFold || FOLDER_PLACEHOLDER}{id}${masksExt}`} />
+                        <InputBanner
+                            title="Masks folder"
+                            value={maskFold}
+                            onChange={handleChangeMasksFolder}
+                        />
+                        <InputBanner
+                            title="Masks extension"
+                            value={masksExt}
+                            onChange={handleChangeMasksExtension}
+                        />
+                    </>
+                )}
+            </SectionBanner>
+            <SectionBanner title="Annotation">
+                <InputBanner
+                    title="Annotator"
+                    value={annot}
+                    onChange={handleChangeAnnotator}
+                />
+                <Select
+                    title="Images per page"
+                    name="img_per_page" 
+                    isHidden={!isClicked}
+                    value={imagesPerPage.toString()}
+                    options={OPTIONS_IMG_PER_PAGE}
+                    onChange={handleChangeImgPerPage}
+                />
+            </SectionBanner>
+            <Button title="Get images" isHidden={!isClicked} handleClick={handleClickGetImages} />
         </div>
     );
 }
@@ -218,7 +228,7 @@ export default withStyles(({ unit, speed }: PhotoRoomThemeType) => ({
         marginTop : 19 * unit,
         zIndex: 2,
         overflowY: 'auto',
-        maxHeight: '84vh',
+        maxHeight: '85vh',
         transition: `width ${speed.fast}s ease-in-out`,
     },
     bannerOpen: {

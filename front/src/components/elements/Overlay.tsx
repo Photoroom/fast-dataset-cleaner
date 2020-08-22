@@ -5,13 +5,15 @@ import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
 type Props = {
     zIndex?: number;
     isVisible: boolean;
+    handleClick?: () => void;
 } & WithStylesProps;
 
 function Overlay(props: Props){
-    const { zIndex, isVisible, css, styles } = props;
+    const { zIndex, isVisible, handleClick, css, styles } = props;
     
     return (
         <div
+            onClick={handleClick}
             style={{zIndex: zIndex || 1}}
             {...css(isVisible ? styles.overlay : styles.overlayHidden)} 
         ></div>
@@ -28,6 +30,10 @@ export default withStyles(({ opacity, color, speed }: PhotoRoomThemeType) => ({
         background: color.overlay,
         opacity: opacity.dark,
         transition: `opacity ${speed.fast}s ease-in-out`,
+
+        ':hover': {
+            cursor: 'pointer',
+        },
     },
     overlayHidden: {
         opacity: 0,

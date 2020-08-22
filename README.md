@@ -2,15 +2,13 @@
 
 ## Installation
 
-- Frontend : run `npm install` in _front_ directory.
 - Backend : run `pip install -r requirements.txt` in this directory.
+- Frontend : run `sudo apt install npm` and `(sudo) npm install -g serve`.
 
 ## Launch the platform
 
-- Backend : run `sh run.sh` in a terminal. You can modify the `run.sh` script file in order to adjust the parameters.
-- Frontend: run `npm start` in a terminal in _front_ folder.
-
-Then, open your navigator and go to _localhost:3000_ to see the platform live.
+Run `sh run.sh`. You can optionally add a specific port for your frontend: `sh run.sh _CUSTOM_PORT_` (default is 1747).
+Open your navigator and go to _localhost:1747_ (or your custom port) to see the platform live.
 
 ## How it works
 
@@ -24,15 +22,15 @@ You can *change the pages with your keyboard arrows*, which enables you to navig
 
 When refreshing the page, unlabeled images are shown. If after a refresh of the page the final screen is displayed, you're done with labeling your dataset! 🎉
 
-## Parser arguments
+## Shortcuts
 
-You may need to change the parameters of `run.sh` script file. Here are the possible arguments:
+For convenience and speed, we implemented a few keyboard shortcuts:
 
-- `--csv_path`: the path (relative or absolute) to the csv file you want to annotate.
-- `--annotated_suffix`: the fragment to add in the name of your annotated csv. Default: _"_annotated"_.
-- `--annotator_column_name`: the name of the annotator column to add. Default: _"annotator"_.
-- `--annotation_column_name`: the name of the annotation column to add. Default: _"is_valid"_.
-- `--id_column_name`: the name of the id column. This column should include the paths to images of your dataset (these should then be unique ids). Default: _"id"_.
+- Open/Close the menu: _m_ or _Space bar_.
+- Navigate between images: Keyboard arrows.
+- Annotate some image: Tap on the digit key associated to the image number.
+- Validate annotations: _Enter_.
+- Load images when the menu is open: _i_ or _g_.
 
 ## Customize the image loader
 

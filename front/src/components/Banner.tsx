@@ -3,12 +3,13 @@ import { withStyles, WithStylesProps } from 'react-with-styles';
 import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
 
 import PhotoRoomLogo from './photoroom_logo.png';
-import BannerContent from './BannerContent';
+import BannerContent, { handleClickGetImages } from './BannerContent';
 import Overlay from './elements/Overlay';
 import Button from './elements/Button';
+import { KEYS_OPEN_CLOSE_BANNER, KEYS_GET_IMAGES } from '../services/Keyboard';
 
-const KEYS_BANNER = [' '];
 const noop = () => {};
+const INPUT_TAGS = ['input', 'select', 'button', 'textarea'];
 
 type Props = {
     isBannerOpen: boolean;
@@ -23,8 +24,11 @@ function Banner(props: Props){
     useEffect(() => {
         const handleKeyPress = (event: any) => {
             const keyPressed = event.key;
-            if (KEYS_BANNER.includes(keyPressed)) {
+            const noActiveInputTag = document.activeElement && INPUT_TAGS.indexOf(document.activeElement.tagName.toLowerCase()) === -1;
+            if (noActiveInputTag && KEYS_OPEN_CLOSE_BANNER.includes(keyPressed)) {
                 handleBanner(!isBannerOpen);
+            } else if (noActiveInputTag && isBannerOpen && KEYS_GET_IMAGES.includes(keyPressed)) {
+                handleClickGetImages();
             }
         }
     
@@ -34,6 +38,10 @@ function Banner(props: Props){
 
     const onClickCard = () => {
         handleBanner(!isBannerOpen);
+    }
+
+    const onClickOverlay = () => {
+        handleBanner(false);
     }
 
     const titleDayNightMode = nightMode ? "Night mode" : "Day mode";
@@ -62,7 +70,7 @@ function Banner(props: Props){
 
                 <BannerContent isClicked={isBannerOpen} />
             </div>
-            <Overlay isVisible={isBannerOpen} />
+            <Overlay isVisible={isBannerOpen} handleClick={onClickOverlay} />
         </>
     );
 }

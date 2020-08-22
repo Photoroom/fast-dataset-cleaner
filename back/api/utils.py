@@ -3,10 +3,6 @@ import string
 from hashlib import sha256
 
 
-def get_annotated_csv_path(csv_path, suffix):
-    return csv_path.replace('.csv', suffix + '.csv')
-
-
 def sha_generator():
     word = "".join([rd.choice(string.ascii_letters) for i in range(10)])
     return sha256(word.encode('ascii')).hexdigest()

@@ -77,11 +77,15 @@ const createSharedUrlArgs = () => {
     return "?" + args.join('&');
 };
 
-export const getSharedUrl = () => {
+const getSharedUrl = () => {
     const currentUrl = new URL(window.location.href);
     const origin = currentUrl.origin;
     const args = createSharedUrlArgs();
     return `${origin}${args}`;
+}
+
+export function updateUrl() {
+    window.history.pushState(null, "Fast Dataset Cleaner", getSharedUrl());
 }
 
 const setLSFromUrl = (url: URL, arg: string, setter: Function) => {

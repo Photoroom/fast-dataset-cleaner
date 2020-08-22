@@ -3,6 +3,9 @@ import { useEffect } from "react";
 const KEYS_LEFT = ['ArrowLeft'];
 const KEYS_RIGHT = ['ArrowRight'];
 const KEYS_NEXT = ['Enter'];
+export const KEYS_OPEN_CLOSE_BANNER = [' ', 'm'];
+export const KEYS_GET_IMAGES = ['g', 'i'];
+
 
 const HANDLE_KEY_PRESS = (event: any, pressLeft: Function, pressRight: Function, pressNext: Function) => {
     const keyPressed = event.key;

@@ -6,14 +6,20 @@ from PIL import Image
 MAX_SIZE_IMG = 600
 
 
-# This function should be the only thing changing for each dataset
+"""
+    ========== Functions to customize if necessary ==========
+    Images are built and sent to frontend thanks to build_image function.
+    
+    Inputs: local paths to images and optionally masks.
+    Output: numpy image
+"""
 def build_image(img_path, mask_path=None):
-    img = np.array(Image.open(img_path).convert('RGBA'))
+    img = open_image(img_path)
     
     if mask_path is None:
         return resize_image(img)
     
-    mask = np.array(Image.open(mask_path).convert('RGBA'))
+    mask = open_image(mask_path)
     composition = compose_img(img, mask)
     img = np.concatenate((img, composition), axis=1)
     
@@ -31,6 +37,10 @@ def compose_img(img, mask):
     cutout = np.array(255 * (fg + bg), dtype=np.uint8)
     
     return cutout
+
+
+def open_image(path):
+    return np.array(Image.open(path).convert('RGBA'))
 
 
 def resize_image(img):

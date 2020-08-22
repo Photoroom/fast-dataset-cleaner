@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
+import TextDisplay from './TextDisplay';
 
 
 type Props = {
-    title: string;
+    title?: string;
     isHidden: boolean;
     value: string | null;
     displayInputValue?: boolean;
@@ -32,17 +33,17 @@ function Input(props: Props){
                 isHidden && styles.bannerHidden
             )}
         >
-            {title && <h3 {...css(styles.titleInput)}>{title}</h3>}
-            {displayInputValue && (
-                <h3 {...css(styles.displayedValueInput)}>{valueInput}</h3>
-            )}
-            <input
-                type="text"
-                value={value || ''}
-                onChange={onChangeInput}
-                onBlur={onBlur}
-                {...css(styles.inputArea)}
-            />
+            <label>
+                {title && <h3 {...css(styles.titleInput)}>{title}</h3>}
+                {displayInputValue && <TextDisplay text={valueInput} />}
+                <input
+                    type="text"
+                    value={value || ''}
+                    onChange={onChangeInput}
+                    onBlur={onBlur}
+                    {...css(styles.inputArea)}
+                />
+            </label>
         </div>
     );
 }
@@ -80,15 +81,5 @@ export default withStyles(({ unit, fontSize, fontFamily, color, speed }: PhotoRo
     bannerHidden: {
         transform: 'scale(0.9)',
         opacity: 0,
-    },
-    displayedValueInput: {
-        color: color.bannerText,
-        textAlign: 'left',
-        fontSize: fontSize.medium,
-        marginBlockEnd: 1.5 * unit,
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        // maxHeight: 2 * fontSize.large + 0.5 * unit,
-        'line-break': 'anywhere',
     },
 }))(Input);
