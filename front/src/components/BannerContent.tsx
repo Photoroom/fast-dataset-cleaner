@@ -27,12 +27,15 @@ import {
     setImagesExtension,
     getImagesExtension,
     getMasksExtension,
-    setMasksExtension
+    setMasksExtension,
+    setAnnotationUltraFastModeLS,
+    getAnnotationUltraFastModeLS
 } from '../services/LocalStorage';
 import { updateUrl } from '../services/Location';
 import Button from './elements/Button';
 import Section from './elements/Section';
 import TextDisplay from './elements/TextDisplay';
+import Switch from './elements/Switch';
 
 
 const FOLDER_PLACEHOLDER = '/path/to/folder/';
@@ -55,7 +58,8 @@ function Banner(props: Props){
     const [idColumn, setIdColumn] = useState(getIdColumnName() || 'id');
     const [imgExt, setImgExt] = useState(getImagesExtension() || '');
     const [masksExt, setMasksExt] = useState(getMasksExtension() || '');
-
+    const [annotationUltraFastMode, setAnnotationUltraFastMode] = useState(getAnnotationUltraFastModeLS() || false);
+    
     useEffect(() => {
         if (!getIdColumnName()) {
             setIdColumnName('id');
@@ -131,8 +135,16 @@ function Banner(props: Props){
         updateUrl();
     };
 
+    const handleChangeAnnotationMode = (mode: boolean) => {
+        setAnnotationUltraFastMode(mode);
+        setAnnotationUltraFastModeLS(mode);
+    }
+
     const InputBanner = useCallback((props: any) => <Input isHidden={!isClicked} {...props} />, [isClicked]);
+    const SelectBanner = useCallback((props: any) => <Select isHidden={!isClicked} {...props} />, [isClicked]);
+    const SwitchBanner = useCallback((props: any) => <Switch isHidden={!isClicked} {...props} />, [isClicked]);
     const SectionBanner = useCallback((props: any) => <Section isHidden={!isClicked} {...props} />, [isClicked]);
+    const ButtonBanner = useCallback((props: any) => <Button isHidden={!isClicked} {...props} />, [isClicked]);
 
     return (
         <div
@@ -175,10 +187,9 @@ function Banner(props: Props){
                 />
             </SectionBanner>
             <SectionBanner title="Masks">
-                <Select
+                <SelectBanner
                     title="Use masks"
-                    name="use_masks" 
-                    isHidden={!isClicked}
+                    name="use_masks"
                     value={useMasks}
                     options={OPTIONS_USE_MASKS}
                     onChange={handleChangeUseMasks}
@@ -205,16 +216,20 @@ function Banner(props: Props){
                     value={annot}
                     onChange={handleChangeAnnotator}
                 />
-                <Select
+                <SelectBanner
                     title="Images per page"
-                    name="img_per_page" 
-                    isHidden={!isClicked}
+                    name="img_per_page"
                     value={imagesPerPage.toString()}
                     options={OPTIONS_IMG_PER_PAGE}
                     onChange={handleChangeImgPerPage}
                 />
+                <SwitchBanner
+                    value={annotationUltraFastMode}
+                    stateFalse="Fast mode"
+                    stateTrue="Ludicrous mode"
+                    handleClick={handleChangeAnnotationMode} />
             </SectionBanner>
-            <Button title="Get images" isHidden={!isClicked} handleClick={handleClickGetImages} />
+            <ButtonBanner title="Get images" handleClick={handleClickGetImages} />
         </div>
     );
 }

@@ -1,7 +1,6 @@
 const getLSValue = (key: string) => localStorage.getItem(key);
 const setLSValue = (key: string, value: string) => localStorage.setItem(key, value.trim());
 
-
 const annotatorLS = 'annotator';
 export const getAnnotator = () => getLSValue(annotatorLS);
 export const setAnnotator = (annotator: string) => setLSValue(annotatorLS, annotator);
@@ -44,3 +43,7 @@ export const setImagesExtension = (ext: string) => setLSValue(extensionImagesLS,
 const extensionMasksLS = 'masksExtension';
 export const getMasksExtension = () => getLSValue(extensionMasksLS);
 export const setMasksExtension = (ext: string) => setLSValue(extensionMasksLS, ext);
+
+const annotationUltraFastModeLS = 'annotationUltraFast';
+export const getAnnotationUltraFastModeLS = () => getLSValue(annotationUltraFastModeLS) === 'true';
+export const setAnnotationUltraFastModeLS = (mode: boolean) => setLSValue(annotationUltraFastModeLS, `${mode}`);

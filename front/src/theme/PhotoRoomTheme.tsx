@@ -18,6 +18,7 @@ export default (nightMode: boolean) => ({
     unit: 8,
     color: {
       PHOTOROOM: '#00155A',
+      PHOTOROOM_LIGHT: '#2457ff',
       page: nightMode ? COLOR_PAGE_NIGHT : COLOR_PAGE_DAY,
       reversePage: nightMode ? COLOR_PAGE_DAY : COLOR_PAGE_NIGHT,
       pageNight: COLOR_PAGE_NIGHT,
@@ -31,6 +32,8 @@ export default (nightMode: boolean) => ({
     },
     speed: {
       fast: 0.3,
+      veryFast: 0.15,
+      ultraFast: 0,
     },
     fontSize: {
       small: 10,

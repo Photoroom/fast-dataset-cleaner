@@ -5,7 +5,7 @@ import {useTransition, animated} from 'react-spring'
 import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
 import { SampleType } from '../types/Annotation';
 import { useKeyboard } from '../services/Keyboard';
-import { getImgPerPage } from '../services/LocalStorage';
+import { getImgPerPage, getAnnotationUltraFastModeLS } from '../services/LocalStorage';
 import FetchService from '../services/Fetch';
 import { closeBannerWidth } from './Banner';
 
@@ -23,6 +23,8 @@ function Sample(props: Props){
     const { id, value, sampleNumber, annotated, changing, name } = sample;
 
     const [isValid, setIsValid] = useState(value);
+
+    const ultraFastMode = getAnnotationUltraFastModeLS();
 
     useEffect(() => setIsValid(value), [value]);
 
@@ -71,8 +73,10 @@ function Sample(props: Props){
                         onKeyDown={handleKeyPress}
                         {...css(
                             styles.card,
+                            ultraFastMode && styles.cardUltraFast,
                             isValid ? styles.cardValid : styles.cardNotValid,
                             annotated && !changing && styles.cardAnnotated,
+                            ultraFastMode && !isValid && styles.cardNotValidUltraFast,
                         )}
                     >    
                         <div {...css(styles.idCard)}>
@@ -111,11 +115,21 @@ export default withStyles(({ unit, color, speed, fontSize }: PhotoRoomThemeType)
             boxShadow: `0 0 ${2.5 * unit}px 0 #000`,
         }
     },
+    cardUltraFast: {
+        transition:
+            `background ${speed.ultraFast}s ease,
+            box-shadow ${speed.ultraFast}s ease,
+            transform ${speed.ultraFast}s ease,
+            opacity ${speed.ultraFast}s ease`,
+    },
     cardValid: {
         background: color.VALID,
     },
     cardNotValid: {
         background: color.NOTVALID,
+    },
+    cardNotValidUltraFast: {
+        opacity: 0.05,
     },
     annotated: {
         marginTop: unit,
