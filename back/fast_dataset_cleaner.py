@@ -5,8 +5,13 @@ from flask_cors import CORS
 from .api import annotation_api
 
 
-app = Flask(__name__)
+FRONTEND_FOLDER = '../front/build/'
+app = Flask(__name__, static_url_path='', static_folder=FRONTEND_FOLDER)
 
 API_PREFIX = '/api'
 app.register_blueprint(annotation_api, url_prefix=API_PREFIX)
 CORS(app)
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')

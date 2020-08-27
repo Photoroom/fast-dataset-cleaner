@@ -9,16 +9,11 @@ import HANDLE_HORIZONTAL_WHEEL, { useHorizontalWheel } from './services/Wheel';
 import { SampleType } from './types/Annotation';
 import FinalScreen from './components/FinalScreen';
 import Progress from './components/Progress';
-import { getAnnotator, getImgPerPage, getDatasetPath, getIdColumnName, getSha } from './services/LocalStorage';
+import { getAnnotator, getDatasetPath, getIdColumnName, getSha } from './services/LocalStorage';
 import { readUrl } from './services/Location';
 
-const HTTP_API = 'http://t2.artizans.ai:36779/api/';
-const NUMBER_IMAGES_PER_PAGE = getImgPerPage();
 
-const fetchService = new FetchService({
-  'api_address': HTTP_API,
-  'images_per_page': NUMBER_IMAGES_PER_PAGE
-});
+const fetchService = new FetchService({ 'api_address': `${window.location.origin}/api/` });
 
 const noop = () => {};
 

@@ -22,7 +22,6 @@ const formatImages = (images: ImageAnnotation[]) => {
 
 type Props = {
     api_address: string;
-    images_per_page: number;
     page?: number;
     images?: ImageAnnotation[];
     totalImages?: number;
@@ -31,7 +30,6 @@ type Props = {
 
 class FetchService {
     api_address: string;
-    images_per_page: number;
     page: number;
     images: ImageAnnotation[];
     totalImages: number;
@@ -41,7 +39,6 @@ class FetchService {
 
     constructor(props: Props) {
         this.api_address = props.api_address;
-        this.images_per_page = props.images_per_page || 8;
         this.page = props.page || 0;
         this.images = props.images || [];
         this.totalImages = props.totalImages || 0;

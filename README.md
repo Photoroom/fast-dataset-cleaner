@@ -2,12 +2,11 @@
 
 ## Installation
 
-- Backend : run `pip install -r requirements.txt` in this directory.
-- Frontend : run `sudo apt install npm` and `(sudo) npm install -g serve`.
+- Run `pip install -r requirements.txt` in this directory.
 
 ## Launch the platform
 
-Run `sh run.sh`. You can optionally add a specific port for your frontend: `sh run.sh _CUSTOM_PORT_` (default is 1747).
+Run `python run.py`. You can optionally add a specific port: `python run.py --port _CUSTOM_PORT_` (default is 1747).
 Open your navigator and go to _localhost:1747_ (or your custom port) to see the platform live.
 
 ## How it works
@@ -34,4 +33,4 @@ For convenience and speed, we implemented a few keyboard shortcuts:
 
 ## Customize the image loader
 
-If you need to display different images (like concatenate several images for each card), you may modify *build_image_for_row* function in _back.api.utils_. This function takes a row of your DataFrame and the name of the id column as input and returns a base64 encoded image.
+If you need to display different images (like concatenate several images for each card), you may modify *build_image* function in _back.image_builder.py_. This function receives paths to an image and its optional mask as inputs and returns an image to display in the graphic interface.
