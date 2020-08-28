@@ -1,6 +1,6 @@
-from werkzeug.utils import cached_property
 from flask import Flask
 from flask_cors import CORS
+from werkzeug.utils import cached_property
 
 from .api import annotation_api
 

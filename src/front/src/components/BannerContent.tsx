@@ -31,7 +31,7 @@ import {
     setAnnotationUltraFastModeLS,
     getAnnotationUltraFastModeLS
 } from '../services/LocalStorage';
-import { updateUrl } from '../services/Location';
+import { updateUrl, UrlArgs } from '../services/Location';
 import Button from './elements/Button';
 import Section from './elements/Section';
 import TextDisplay from './elements/TextDisplay';
@@ -48,16 +48,29 @@ type Props = {
 
 function Banner(props: Props){
     const { isClicked, css, styles } = props;
+
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+    const urlCsvPath = params.get(UrlArgs.CSV_PATH);
+    const urlImagesPerPage = params.get(UrlArgs.IMAGES_PER_PAGE);
+    const urlPassword = params.get(UrlArgs.PASSWORD);
+    const urlImagesFolder = params.get(UrlArgs.IMAGES_FOLDER);
+    const urlMasksFolder = params.get(UrlArgs.MASKS_FOLDER);
+    const urlUseMasks = params.get(UrlArgs.USE_MASKS);
+    const urlIdColumn = params.get(UrlArgs.ID_COLUMN);
+    const urlImagesExtension = params.get(UrlArgs.IMAGES_EXTENSION);
+    const urlMasksExtension = params.get(UrlArgs.MASKS_EXTENSION);
+    
     const [annot, setAnnot] = useState(getAnnotator() || '');
-    const [csv, setCsv] = useState(getDatasetPath() || '');
-    const [imagesPerPage, setImagesPerPage] = useState(getImgPerPage() || DEFAULT_IMG_PER_PAGE);
-    const [shaPass, setShaPass] = useState(getSha() || '');
-    const [imgFold, setImgFold] = useState(getImagesFolder() || '');
-    const [maskFold, setMaskFold] = useState(getMasksFolder() || '');
-    const [useMasks, setUseMasksValue] = useState(getUseMasks() || 'false');
-    const [idColumn, setIdColumn] = useState(getIdColumnName() || 'id');
-    const [imgExt, setImgExt] = useState(getImagesExtension() || '');
-    const [masksExt, setMasksExt] = useState(getMasksExtension() || '');
+    const [csv, setCsv] = useState(urlCsvPath || getDatasetPath() || '');
+    const [imagesPerPage, setImagesPerPage] = useState(urlImagesPerPage || getImgPerPage() || DEFAULT_IMG_PER_PAGE);
+    const [shaPass, setShaPass] = useState(urlPassword || getSha() || '');
+    const [imgFold, setImgFold] = useState(urlImagesFolder || getImagesFolder() || '');
+    const [maskFold, setMaskFold] = useState(urlMasksFolder || getMasksFolder() || '');
+    const [useMasks, setUseMasksValue] = useState(urlUseMasks || getUseMasks() || 'false');
+    const [idColumn, setIdColumn] = useState(urlIdColumn || getIdColumnName() || 'id');
+    const [imgExt, setImgExt] = useState(urlImagesExtension || getImagesExtension() || '');
+    const [masksExt, setMasksExt] = useState(urlMasksExtension || getMasksExtension() || '');
     const [annotationUltraFastMode, setAnnotationUltraFastMode] = useState(getAnnotationUltraFastModeLS() || false);
     
     useEffect(() => {

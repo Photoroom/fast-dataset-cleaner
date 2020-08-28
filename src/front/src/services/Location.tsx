@@ -19,7 +19,7 @@ import {
     setMasksExtension
 } from "./LocalStorage";
 
-enum UrlArgs {
+export enum UrlArgs {
     PASSWORD = 'sha',
     IMAGES_PER_PAGE = 'imgPerPage',
     CSV_PATH = 'csv',
