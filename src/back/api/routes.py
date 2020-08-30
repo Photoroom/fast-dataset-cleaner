@@ -11,7 +11,7 @@ from ..services import AnnotationService, ImageService
 
 
 SHA_HASH = sha_generator()
-print_important(f"Password to add in the frontend options:", important_msg=SHA_HASH)
+print_important("Password to add in the frontend options:", important_msg=SHA_HASH)
 
 
 annotation_service = AnnotationService()
@@ -41,8 +41,8 @@ class GetAnnotations(Resource):
         masks_folder = body['masks_folder'] if 'masks_folder' in body else None
         with_masks = body['with_masks'] if 'with_masks' in body else False
         id_column = body['id_column_name'] if 'id_column_name' in body else None
-        image_ext = body['image_ext'] if 'image_ext' in body else None
-        mask_ext = body['mask_ext'] if 'mask_ext' in body else None
+        image_ext = body['image_ext'] if 'image_ext' in body else ''
+        mask_ext = body['mask_ext'] if 'mask_ext' in body else ''
         
         if sha_hash != SHA_HASH:
             return { 'error': PASSWORD_ERROR }, 200

@@ -7,8 +7,8 @@ class ImageService:
     def __init__(self):
         self.img_dir = None
         self.mask_dir = None
-        self.img_extension = None
-        self.mask_extension = None
+        self.img_extension = ''
+        self.mask_extension = ''
         self.use_masks = None
 
         

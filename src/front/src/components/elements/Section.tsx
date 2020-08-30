@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
+
+import { FastDatasetCleanerThemeType } from '../../theme/FastDatasetCleanerTheme';
 import Separator from './Separator';
 
 
@@ -27,7 +28,7 @@ function Section(props: Props){
     );
 }
 
-export default withStyles(({ unit, fontSize, color, speed }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, fontSize, color, speed }: FastDatasetCleanerThemeType) => ({
     titleSection: {
         color: color.bannerText,
         textAlign: 'center',

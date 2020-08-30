@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 
-import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
+import { FastDatasetCleanerThemeType } from '../theme/FastDatasetCleanerTheme';
 import Sample from './Sample';
 import { SampleType } from '../types/Annotation';
 import FetchService from '../services/Fetch';
@@ -37,7 +37,7 @@ function SampleAnnotation(props: Props) {
 
 const unit = 8;
 export const mainColumnHeight = `calc(100vh - 2 * ${unit}px)`;
-export default withStyles(({ color, unit, speed }: PhotoRoomThemeType) => ({
+export default withStyles(({ color, unit, speed }: FastDatasetCleanerThemeType) => ({
     mainColumn: {
         background: color.page,
         marginLeft: closeBannerWidth + 2 * unit,

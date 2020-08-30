@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
+
+import { FastDatasetCleanerThemeType } from '../../theme/FastDatasetCleanerTheme';
 
 type Props = {
     value: boolean;
@@ -37,7 +38,7 @@ const switchWidth = 7 * unit;
 const switchHeight = 4 * unit;
 const switchPadding = 0.5 * unit;
 const switchDiscSize = switchHeight - 2 * switchPadding;
-export default withStyles(({ fontSize, color, speed }: PhotoRoomThemeType) => ({
+export default withStyles(({ fontSize, color, speed }: FastDatasetCleanerThemeType) => ({
     switch: {
         position: 'relative',
         display: 'inline-block',
@@ -49,7 +50,7 @@ export default withStyles(({ fontSize, color, speed }: PhotoRoomThemeType) => ({
         transition: `background-color ${speed.fast}s ease-in-out`,
     },
     switchChecked: {
-        backgroundColor: color.PHOTOROOM_LIGHT,
+        backgroundColor: color.FAST_DATASET_CLEANER_LIGHT,
     },
     switchInput: {
         opacity: 0,

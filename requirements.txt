@@ -1,8 +1,8 @@
 Flask==1.1.2
 Flask-Cors==3.0.8
 flask-restx==0.2.0
-numpy==1.18.1
-opencv-python==4.2.0.34
-pandas==1.0.3
-Pillow==7.1.2
+numpy
+opencv-python
+pandas
+Pillow
 Werkzeug==0.16.1

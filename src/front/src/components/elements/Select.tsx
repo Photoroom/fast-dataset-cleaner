@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
+
+import { FastDatasetCleanerThemeType } from '../../theme/FastDatasetCleanerTheme';
 
 
 type Props = {
@@ -32,7 +33,7 @@ function Select(props: Props){
     );
 }
 
-export default withStyles(({ unit, fontSize, fontFamily, color, speed }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, fontSize, fontFamily, color, speed }: FastDatasetCleanerThemeType) => ({
     titleInput: {
         color: color.bannerText,
         textAlign: 'left',

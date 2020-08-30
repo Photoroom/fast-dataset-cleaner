@@ -1,6 +1,6 @@
 import { Theme } from "react-with-styles";
 
-export type PhotoRoomThemeType = {
+export type FastDatasetCleanerThemeType = {
   isNightMode: boolean;
   unit: number;
   color: any;
@@ -17,8 +17,8 @@ export default (nightMode: boolean) => ({
     isNightMode: nightMode,
     unit: 8,
     color: {
-      PHOTOROOM: '#00155A',
-      PHOTOROOM_LIGHT: '#2457ff',
+      FAST_DATASET_CLEANER: '#00155A',
+      FAST_DATASET_CLEANER_LIGHT: '#2457ff',
       page: nightMode ? COLOR_PAGE_NIGHT : COLOR_PAGE_DAY,
       reversePage: nightMode ? COLOR_PAGE_DAY : COLOR_PAGE_NIGHT,
       pageNight: COLOR_PAGE_NIGHT,

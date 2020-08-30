@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
+
+import { FastDatasetCleanerThemeType } from '../../theme/FastDatasetCleanerTheme';
 
 type Props = {
     zIndex?: number;
@@ -20,7 +21,7 @@ function Overlay(props: Props){
     );
 }
 
-export default withStyles(({ opacity, color, speed }: PhotoRoomThemeType) => ({
+export default withStyles(({ opacity, color, speed }: FastDatasetCleanerThemeType) => ({
     overlay: {
         width: '100vw',
         height: '100vh',

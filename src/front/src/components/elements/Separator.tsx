@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
+
+import { FastDatasetCleanerThemeType } from '../../theme/FastDatasetCleanerTheme';
 
 type Props = {
     thin?: boolean;
@@ -8,7 +9,7 @@ type Props = {
 
 const Separator = ({ thin, css, styles }: Props) => <div {...css(styles.separator, thin && styles.thinSeparator)}></div>;
 
-export default withStyles(({ unit, color }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, color }: FastDatasetCleanerThemeType) => ({
     separator: {
         width: '100%',
         margin: `${3 * unit}px 0`,

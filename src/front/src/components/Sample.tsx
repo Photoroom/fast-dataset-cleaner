@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 import {useTransition, animated} from 'react-spring'
 
-import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
+import { FastDatasetCleanerThemeType } from '../theme/FastDatasetCleanerTheme';
 import { SampleType } from '../types/Annotation';
 import { useKeyboard } from '../services/Keyboard';
 import { getImgPerPage, getAnnotationUltraFastModeLS } from '../services/LocalStorage';
@@ -96,7 +96,7 @@ function Sample(props: Props){
 const unit = 8;
 export const cardWidth = 95 * unit;
 const maxHeightCardContent = `calc(100vh / ${getImgPerPage() / 2} - ${2 * unit}px)`;
-export default withStyles(({ unit, color, speed, fontSize }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, color, speed, fontSize }: FastDatasetCleanerThemeType) => ({
     card: {
         maxHeight: `calc(100vh / ${getImgPerPage() / 2})`,
         border: '1px solid #ccc',

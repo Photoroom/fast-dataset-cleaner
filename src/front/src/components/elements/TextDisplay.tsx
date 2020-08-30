@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
+
+import { FastDatasetCleanerThemeType } from '../../theme/FastDatasetCleanerTheme';
 
 
 type Props = {
@@ -19,7 +20,7 @@ function TextDisplay(props: Props){
     );
 }
 
-export default withStyles(({ unit, fontSize, color }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, fontSize, color }: FastDatasetCleanerThemeType) => ({
     displayedText: {
         color: color.bannerText,
         textAlign: 'left',

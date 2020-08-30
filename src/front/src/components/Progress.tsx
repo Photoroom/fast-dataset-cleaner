@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 
-import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
+import { FastDatasetCleanerThemeType } from '../theme/FastDatasetCleanerTheme';
 import { ProgressProps } from '../types/Annotation';
 
 
@@ -36,7 +36,7 @@ function Progress(props: Props){
     );
 }
 
-export default withStyles(({ unit, fontSize, color, speed, isNightMode }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, fontSize, color, speed, isNightMode }: FastDatasetCleanerThemeType) => ({
     title: {
         marginBlockStart: unit,
         marginBlockEnd: unit,

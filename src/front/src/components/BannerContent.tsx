@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
-import Input from './elements/Input';
-import Separator from './elements/Separator';
-import Select from './elements/Select';
+
+import { FastDatasetCleanerThemeType } from '../theme/FastDatasetCleanerTheme';
 import {
     getAnnotator,
     getImgPerPage,
@@ -33,9 +31,12 @@ import {
 } from '../services/LocalStorage';
 import { updateUrl, UrlArgs } from '../services/Location';
 import Button from './elements/Button';
+import Input from './elements/Input';
 import Section from './elements/Section';
-import TextDisplay from './elements/TextDisplay';
+import Select from './elements/Select';
+import Separator from './elements/Separator';
 import Switch from './elements/Switch';
+import TextDisplay from './elements/TextDisplay';
 
 
 const FOLDER_PLACEHOLDER = '/path/to/folder/';
@@ -249,7 +250,7 @@ function Banner(props: Props){
 
 const unit = 8;
 const bannerContentSideMargin = 3 * unit;
-export default withStyles(({ unit, speed }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, speed }: FastDatasetCleanerThemeType) => ({
     bannerContent: {
         width: 0,
         margin: bannerContentSideMargin,

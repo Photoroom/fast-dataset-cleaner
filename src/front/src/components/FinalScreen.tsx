@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
 import {useTransition, animated} from 'react-spring'
 
-import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
+import { FastDatasetCleanerThemeType } from '../theme/FastDatasetCleanerTheme';
 import Button from './elements/Button';
 
 
@@ -70,7 +70,7 @@ function FinalScreen(props: Props){
 }
 
 
-export default withStyles(({ unit, color, fontSize }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, color, fontSize }: FastDatasetCleanerThemeType) => ({
     card: {
         display: 'block',
         position: 'fixed',

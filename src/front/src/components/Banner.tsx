@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../theme/PhotoRoomTheme';
 
-import PhotoRoomLogo from './photoroom_logo.png';
+import MenuLogo from './menu_logo.png';
+import { FastDatasetCleanerThemeType } from '../theme/FastDatasetCleanerTheme';
 import BannerContent, { handleClickGetImages } from './BannerContent';
 import Overlay from './elements/Overlay';
 import Button from './elements/Button';
@@ -56,7 +56,7 @@ function Banner(props: Props){
                 )}
             >
                 <img
-                    src={PhotoRoomLogo}
+                    src={MenuLogo}
                     alt="Logo"
                     onClick={onClickCard}
                     {...css(
@@ -80,7 +80,7 @@ const closeLogoSize = 8 * unit;
 const openLogoSize = 12 * unit;
 export const closeBannerWidth = 11 * unit;
 const openBannerWidth = 42 * unit;
-export default withStyles(({ unit, color, speed }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, color, speed }: FastDatasetCleanerThemeType) => ({
     banner: {
         width: closeBannerWidth,
         height: '100vh',
@@ -111,8 +111,6 @@ export default withStyles(({ unit, color, speed }: PhotoRoomThemeType) => ({
         top: 2 * unit,
         left: unit,
         height: closeLogoSize,
-        border: '2px solid #fff',
-        borderRadius: 3.5 * unit,
         cursor: 'pointer',
         transition: `transform ${speed.fast}s ease-in-out, height ${speed.fast}s ease-in-out, left ${speed.fast}s ease-in-out, top ${speed.fast}s ease-in-out`,
     },

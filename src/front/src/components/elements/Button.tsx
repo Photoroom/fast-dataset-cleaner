@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles, WithStylesProps } from 'react-with-styles';
-import { PhotoRoomThemeType } from '../../theme/PhotoRoomTheme';
+
+import { FastDatasetCleanerThemeType } from '../../theme/FastDatasetCleanerTheme';
 
 
 type Props = {
@@ -24,7 +25,7 @@ function Button(props: Props){
     );
 }
 
-export default withStyles(({ unit, fontSize, fontFamily, color, speed, isNightMode }: PhotoRoomThemeType) => ({
+export default withStyles(({ unit, fontSize, fontFamily, color, speed, isNightMode }: FastDatasetCleanerThemeType) => ({
     button: {
         width: '100%',
         fontFamily: fontFamily,
