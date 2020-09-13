@@ -2,11 +2,11 @@
 
 ## Installation
 
-- Run `pip install -r requirements.txt` in this directory.
+- Run `pip3 install fast-dataset-cleaner`.
 
 ## Launch the platform
 
-Run `python run.py`. You can optionally add a specific port: `python run.py --port _CUSTOM_PORT_` (default is 1747).
+Run `fast-dataset-cleaner` in your CLI. You can optionally add a specific port: `fast-dataset-cleaner --port _CUSTOM_PORT_` (default is 1747).
 Open your navigator and go to _localhost:1747_ (or your custom port) to see the platform live.
 
 ## How it works

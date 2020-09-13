@@ -8,21 +8,18 @@ with open("requirements.txt", "r") as req:
 
 
 setup(
-    name="fast-dataset-cleaner",
-    version="1.0.0",
+    name="fast-dataset-cleaner-test",
+    version="1.0.0b9",
     author="Thomas Chabal",
     author_email="thomas@photoroom.com",
     description="Web platform for fast image dataset cleaning",
+    keywords="annotation,dataset cleaning,binary annotation,fast dataset cleaner",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/PhotoRoom/fast-dataset-cleaner",
-    scripts=['scripts/fast-dataset-cleaner'],
-    # package_dir = {'':'src'},
     packages=find_packages(),
-    package_data = {
-        '': ['*.js', '*.html', '*.css', '*.json', '*.png', '*.ico'],
-    },
-    # include_package_data=True,
+    include_package_data=True,
+    scripts=['scripts/fast-dataset-cleaner'],
     install_requires=install_requires,
     classifiers=[
         "Programming Language :: Python :: 3",

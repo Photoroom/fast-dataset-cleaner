@@ -1,3 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env python3
 
-python3 run.py "$@"
+from fast_dataset_cleaner.command import main
+main()

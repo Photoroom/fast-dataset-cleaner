@@ -1,4 +1,2 @@
-include src/front/build/*
-include src/front/build/static/css/*
-include src/front/build/static/js/*
-include src/front/build/static/media/*
+graft fast_dataset_cleaner/front/build/
+global-exclude *.py[cod]

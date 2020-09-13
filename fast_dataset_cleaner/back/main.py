@@ -12,6 +12,7 @@ API_PREFIX = '/api'
 app.register_blueprint(annotation_api, url_prefix=API_PREFIX)
 CORS(app)
 
+import sys, os,  pathlib
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
