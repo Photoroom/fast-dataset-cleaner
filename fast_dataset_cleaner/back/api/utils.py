@@ -2,7 +2,7 @@ import random as rd
 import string
 from hashlib import sha256
 
-rd.seed(0)
+# rd.seed(0)    # For dev only
 def sha_generator():
     word = "".join([rd.choice(string.ascii_letters) for i in range(10)])
     return sha256(word.encode('ascii')).hexdigest()
