@@ -95,8 +95,11 @@ function Sample(props: Props){
 
 const unit = 8;
 export const cardWidth = 95 * unit;
-const maxHeightCardContent = `calc(100vh / ${getImgPerPage() / 2} - ${2 * unit}px)`;
-export default withStyles(({ unit, color, speed, fontSize }: FastDatasetCleanerThemeType) => ({
+const maxHeightCardContent = {
+    large: `calc(100vh / ${getImgPerPage() / 2} - ${1 * unit}px)`,
+    xlarge: `calc(100vh / ${getImgPerPage() / 2} - ${2 * unit}px)`,
+};
+export default withStyles(({ unit, color, speed, fontSize, breakpoints }: FastDatasetCleanerThemeType) => ({
     card: {
         maxHeight: `calc(100vh / ${getImgPerPage() / 2})`,
         border: '1px solid #ccc',
@@ -113,7 +116,13 @@ export default withStyles(({ unit, color, speed, fontSize }: FastDatasetCleanerT
         cursor: 'pointer',
         ':hover': {
             boxShadow: `0 0 ${2.5 * unit}px 0 #000`,
-        }
+        },
+
+        [breakpoints.large]: {
+            maxHeight: `calc(100vh / ${getImgPerPage() / 2} - 2 * ${0.5 * unit}px)`,
+            height: `calc(100% - 2 * ${0.5 * unit}px)`,
+            margin: `${0.25 * unit}px ${0.5 * unit}px`,
+        },
     },
     cardUltraFast: {
         transition:
@@ -144,7 +153,11 @@ export default withStyles(({ unit, color, speed, fontSize }: FastDatasetCleanerT
         width: 5 * unit,
         borderRight: '1px solid #ccc',
         height: '100%',
-        maxHeight: maxHeightCardContent,
+        maxHeight: maxHeightCardContent.xlarge,
+
+        [breakpoints.large]: {
+            maxHeight: maxHeightCardContent.large,
+        },
     },
     id: {
         marginTop: 1.5 * unit,
@@ -152,7 +165,11 @@ export default withStyles(({ unit, color, speed, fontSize }: FastDatasetCleanerT
     image: {
         height: '100%',
         marginLeft: 5 * unit,
-        maxHeight: maxHeightCardContent,
+        maxHeight: maxHeightCardContent.xlarge,
         maxWidth: `calc(100% - ${5 * unit + 2 * unit}px)`,
+
+        [breakpoints.large]: {
+            maxHeight: maxHeightCardContent.large,
+        },
     },
 }))(Sample);

@@ -36,8 +36,11 @@ function SampleAnnotation(props: Props) {
 }
 
 const unit = 8;
-export const mainColumnHeight = `calc(100vh - 2 * ${unit}px)`;
-export default withStyles(({ color, unit, speed }: FastDatasetCleanerThemeType) => ({
+const mainColumnHeight = {
+    large: `calc(100vh - 2 * ${0.5 * unit}px)`,
+    xlarge: `calc(100vh - 2 * ${unit}px)`,
+};
+export default withStyles(({ color, unit, speed, breakpoints }: FastDatasetCleanerThemeType) => ({
     mainColumn: {
         background: color.page,
         marginLeft: closeBannerWidth + 2 * unit,
@@ -46,7 +49,14 @@ export default withStyles(({ color, unit, speed }: FastDatasetCleanerThemeType) 
         paddingBottom: unit,
         display: 'flex',
         flexWrap: 'wrap',
-        height: mainColumnHeight,
+        height: mainColumnHeight.xlarge,
         transition: `background ${speed.fast}s ease-in-out`,
+
+        [breakpoints.large]: {
+            paddingTop: 0.5 * unit,
+            paddingBottom: 0.5 * unit,
+            marginLeft: closeBannerWidth + 4 * unit,
+            height: mainColumnHeight.large,
+        },
     },
 }))(SampleAnnotation);

@@ -36,7 +36,7 @@ function Progress(props: Props){
     );
 }
 
-export default withStyles(({ unit, fontSize, color, speed, isNightMode }: FastDatasetCleanerThemeType) => ({
+export default withStyles(({ unit, fontSize, color, speed, isNightMode, breakpoints }: FastDatasetCleanerThemeType) => ({
     title: {
         marginBlockStart: unit,
         marginBlockEnd: unit,
@@ -65,6 +65,10 @@ export default withStyles(({ unit, fontSize, color, speed, isNightMode }: FastDa
         display: 'inline-block',
         margin: `${2 * unit}px ${0.25 * unit}px`,
         cursor: 'pointer',
+
+        [breakpoints.large]: {
+            margin: `${1.5 * unit}px ${0.125 * unit}px`,
+        },
     },
     navigationArrows: {
         position: 'absolute',

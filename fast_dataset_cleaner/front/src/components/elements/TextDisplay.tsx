@@ -20,7 +20,7 @@ function TextDisplay(props: Props){
     );
 }
 
-export default withStyles(({ unit, fontSize, color }: FastDatasetCleanerThemeType) => ({
+export default withStyles(({ unit, fontSize, color, breakpoints }: FastDatasetCleanerThemeType) => ({
     displayedText: {
         color: color.bannerText,
         textAlign: 'left',
@@ -29,5 +29,9 @@ export default withStyles(({ unit, fontSize, color }: FastDatasetCleanerThemeTyp
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         'line-break': 'anywhere',
+
+        [breakpoints.large]: {
+            marginBlockEnd: unit,
+        },
     },
 }))(TextDisplay);

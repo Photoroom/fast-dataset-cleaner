@@ -8,6 +8,7 @@ export type FastDatasetCleanerThemeType = {
   fontSize: any;
   fontFamily: string;
   opacity: any;
+  breakpoints: any;
 } & Theme;
 
 const COLOR_PAGE_DAY = '#fff';
@@ -46,5 +47,11 @@ export default (nightMode: boolean) => ({
       light: 0.2,
       medium: 0.5,
       dark: 0.8,
+    },
+    breakpoints: {
+      small: '@media (max-width: 639px)',
+      medium: '@media (min-width: 640px) and (max-width: 1047px)',
+      large: '@media (min-width: 1048px) and (max-width: 1450px)',
+      xlarge: '@media (min-width: 1451px)',
     }
   });

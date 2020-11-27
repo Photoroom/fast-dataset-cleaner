@@ -33,7 +33,7 @@ function Select(props: Props){
     );
 }
 
-export default withStyles(({ unit, fontSize, fontFamily, color, speed }: FastDatasetCleanerThemeType) => ({
+export default withStyles(({ unit, fontSize, fontFamily, color, speed, breakpoints }: FastDatasetCleanerThemeType) => ({
     titleInput: {
         color: color.bannerText,
         textAlign: 'left',
@@ -42,6 +42,12 @@ export default withStyles(({ unit, fontSize, fontFamily, color, speed }: FastDat
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         maxHeight: fontSize.large + 0.25 * unit,
+
+        [breakpoints.large]: {
+            fontSize: fontSize.medium,
+            marginBlockEnd: unit,
+            maxHeight: fontSize.medium + 0.25 * unit,
+        },
     },
     select: {
         width: `100%`,
@@ -58,7 +64,13 @@ export default withStyles(({ unit, fontSize, fontFamily, color, speed }: FastDat
 
         ':focus': {
             boxShadow: `0 0 ${unit}px 0 ${color.bannerText}`,
-        }
+        },
+
+        [breakpoints.large]: {
+            fontSize: fontSize.medium,
+            height: fontSize.medium + 2 * unit,
+            padding: `${0.5 * unit}px ${1 * unit}px`,
+        },
     },
     bannerElement: {
         margin: `${unit}px 0`,

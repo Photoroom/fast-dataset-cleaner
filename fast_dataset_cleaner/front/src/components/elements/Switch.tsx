@@ -34,20 +34,41 @@ const Switch = (props: Props) => {
 }
 
 const unit = 8;
-const switchWidth = 7 * unit;
-const switchHeight = 4 * unit;
-const switchPadding = 0.5 * unit;
-const switchDiscSize = switchHeight - 2 * switchPadding;
-export default withStyles(({ fontSize, color, speed }: FastDatasetCleanerThemeType) => ({
+const switchWidth = {
+    large: 5 * unit,
+    xlarge: 7 * unit,
+};
+const switchHeight = {
+    large: 3 * unit,
+    xlarge: 4 * unit,
+};
+const switchPadding = {
+    large: 0.25 * unit,
+    xlarge: 0.5 * unit,
+};
+const switchDiscSize = {
+    large: switchHeight.large - 2 * switchPadding.large,
+    xlarge: switchHeight.xlarge - 2 * switchPadding.xlarge,
+};
+const roundSliderCheckedTransform = {
+    large: `translateX(${switchWidth.large - switchDiscSize.large - 2 * switchPadding.large}px)`,
+    xlarge: `translateX(${switchWidth.xlarge - switchDiscSize.xlarge - 2 * switchPadding.xlarge}px)`,
+};
+export default withStyles(({ fontSize, color, speed, breakpoints }: FastDatasetCleanerThemeType) => ({
     switch: {
         position: 'relative',
         display: 'inline-block',
-        width: switchWidth,
-        height: switchHeight,
+        width: switchWidth.xlarge,
+        height: switchHeight.xlarge,
         backgroundColor: color.bannerSeparator,
-        borderRadius: switchHeight,
+        borderRadius: switchHeight.xlarge,
         margin: `${0.5 * unit}px ${1.5 * unit}px`,
         transition: `background-color ${speed.fast}s ease-in-out`,
+
+        [breakpoints.large]: {
+            width: switchWidth.large,
+            height: switchHeight.large,
+        },
     },
     switchChecked: {
         backgroundColor: color.FAST_DATASET_CLEANER_LIGHT,
@@ -59,20 +80,32 @@ export default withStyles(({ fontSize, color, speed }: FastDatasetCleanerThemeTy
     },
     roundSlider: {
         position: 'absolute',
-        top: switchPadding,
+        top: switchPadding.xlarge,
         right: 0,
         transition: `transform ${speed.fast}s ease-in-out`,
-        borderRadius: switchHeight,
+        borderRadius: switchHeight.xlarge,
 
         content: "",
-        height: switchDiscSize,
-        width: switchDiscSize,
-        left: switchPadding,
-        bottom: switchPadding,
+        height: switchDiscSize.xlarge,
+        width: switchDiscSize.xlarge,
+        left: switchPadding.xlarge,
+        bottom: switchPadding.xlarge,
         backgroundColor: 'white',
+
+        [breakpoints.large]: {
+            left: switchPadding.large,
+            bottom: switchPadding.large,
+            top: switchPadding.large,
+            height: switchDiscSize.large,
+            width: switchDiscSize.large,
+        },
     },
     roundSliderChecked: {
-        transform: `translateX(${switchWidth - switchDiscSize - 2 * switchPadding}px)`,
+        transform: roundSliderCheckedTransform.xlarge,
+
+        [breakpoints.large]: {
+            transform: roundSliderCheckedTransform.large,
+        },
     },
     switchArea: {
         cursor: 'pointer',
@@ -84,6 +117,10 @@ export default withStyles(({ fontSize, color, speed }: FastDatasetCleanerThemeTy
         top: 0.75 * unit,
         margin: 0,
         color: color.pageDay,
+
+        [breakpoints.large]: {
+            top: 0.25 * unit,
+        },
     },
     bannerHidden: {
         transform: 'scale(0.9)',

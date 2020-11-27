@@ -244,23 +244,48 @@ function Banner(props: Props){
                     handleClick={handleChangeAnnotationMode} />
             </SectionBanner>
             <ButtonBanner title="Get images" handleClick={handleClickGetImages} />
+            <div {...css(styles.postSpace)}></div>
         </div>
     );
 }
 
 const unit = 8;
-const bannerContentSideMargin = 3 * unit;
-export default withStyles(({ unit, speed }: FastDatasetCleanerThemeType) => ({
+const bannerContentSideMargin = {
+    large: 2 * unit,
+    xlarge: 3 * unit,
+};
+const bannerContentMarginTop = {
+    large: 14 * unit,
+    xlarge: 19 * unit,
+};
+const bannerContentMaxHeight = {
+    large: '86vh',
+    xlarge: '85vh',
+};
+export default withStyles(({ speed, breakpoints }: FastDatasetCleanerThemeType) => ({
     bannerContent: {
         width: 0,
-        margin: bannerContentSideMargin,
-        marginTop : 19 * unit,
+        margin: bannerContentSideMargin.xlarge,
+        marginTop : bannerContentMarginTop.xlarge,
         zIndex: 2,
         overflowY: 'auto',
-        maxHeight: '85vh',
+        maxHeight: bannerContentMaxHeight.xlarge,
         transition: `width ${speed.fast}s ease-in-out`,
+
+        [breakpoints.large]: {
+            margin: bannerContentSideMargin.large,
+            marginTop : bannerContentMarginTop.large,
+            maxHeight: bannerContentMaxHeight.large,
+        },
     },
     bannerOpen: {
-        width: `calc(100% - 2 * ${bannerContentSideMargin}px)`,
+        width: `calc(100% - 2 * ${bannerContentSideMargin.xlarge}px)`,
+
+        [breakpoints.large]: {
+            width: `calc(100% - 2 * ${bannerContentSideMargin.large}px)`,
+        },
+    },
+    postSpace: {
+        height: unit,
     },
 }))(Banner);
