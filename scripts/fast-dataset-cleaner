@@ -1,0 +1,4 @@
+#!/usr/bin/env python3
+
+from fast_dataset_cleaner.command import main
+main()
