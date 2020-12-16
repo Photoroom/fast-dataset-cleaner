@@ -8,8 +8,8 @@ with open("requirements.txt", "r") as req:
 
 
 setup(
-    name="fast-dataset-cleaner-test",
-    version="1.0.0b11",
+    name="fast-dataset-cleaner",
+    version="1.0.0",
     author="Thomas Chabal",
     author_email="t.chabal@hotmail.fr",
     description="Web platform for fast image dataset cleaning",

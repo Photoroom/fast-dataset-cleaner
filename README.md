@@ -2,6 +2,8 @@
 
 <img src="fast-dataset-cleaner.gif" width="800" />
 
+_Example of a dataset cleaning, removing all images of dogs and keeping those of cats._
+
 ## Installation
 
 - Run `pip3 install fast-dataset-cleaner`.
