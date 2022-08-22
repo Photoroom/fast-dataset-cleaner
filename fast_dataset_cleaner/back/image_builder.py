@@ -14,12 +14,12 @@ MAX_SIZE_IMG = 600
     Output: numpy image
 """
 def build_image(img_path, mask_path=None):
-    img = open_image(img_path)
+    img = cv2.cvtColor(cv2.imread(img_path, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
     
     if mask_path is None:
         return resize_image(img)
     
-    mask = open_image(mask_path)
+    mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
     composition = compose_img(img, mask)
     img = np.concatenate((img, composition), axis=1)
     
@@ -32,8 +32,8 @@ def compose_img(img, mask):
 
     mask = cv2.resize(mask, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_CUBIC)
     mask, img = mask / 255, img / 255
-    fg = mask * img
-    bg = (1-mask) * bg
+    fg = mask[:,:,None] * img
+    bg = (1-mask[:,:,None]) * bg
     cutout = np.array(255 * (fg + bg), dtype=np.uint8)
     
     return cutout
