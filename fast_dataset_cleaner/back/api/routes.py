@@ -1,8 +1,8 @@
 from flask import Flask, request, send_file
 from flask_restx import Resource
 import io
-from PIL import Image
-
+import cv2
+import time
 from . import api
 from .utils import sha_generator, print_important
 from ..constants import PASSWORD_ERROR
@@ -18,13 +18,17 @@ annotation_service = AnnotationService()
 image_service = ImageService()
 
 
+
 def send_numpy_image(image):
-    img = Image.fromarray(image.astype('uint8'))
-    file_object = io.BytesIO()
-    img.save(file_object, 'PNG')
+    # Convert the image from numpy array to JPEG
+    is_success, im_buf_arr = cv2.imencode(".jpg", image)
+    byte_im = im_buf_arr.tobytes()
+
+    # Create a BytesIO object
+    file_object = io.BytesIO(byte_im)
     file_object.seek(0)
-            
-    return send_file(file_object, mimetype='image/PNG')
+
+    return send_file(file_object, mimetype='image/JPEG')
 
 
 
