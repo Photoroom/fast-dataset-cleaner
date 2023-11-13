@@ -1,8 +1,11 @@
+import csv
+import os
 from flask import Flask, request, send_file
 from flask_restx import Resource
 import io
 import cv2
-import time
+from pathlib import Path
+
 from . import api
 from .utils import sha_generator, print_important
 from ..constants import PASSWORD_ERROR
@@ -55,6 +58,18 @@ class GetAnnotations(Resource):
         
         if check_img is not None:
             return check_img
+        if csv_path is None or csv_path == '':
+            print("No csv path provided, creating one...")
+
+            csv_path = os.path.join(Path(images_folder).parent.absolute(), f'{os.path.basename(images_folder)}.csv')
+            if not os.path.exists(csv_path):
+                with open(csv_path, 'w', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow([id_column])
+                    for filename in os.listdir(images_folder):
+                        if filename.endswith(image_ext):
+                            writer.writerow([filename.removesuffix(image_ext)])
+
         return annotation_service.get_annotations(csv_path, first, offset, id_column)
         
         
