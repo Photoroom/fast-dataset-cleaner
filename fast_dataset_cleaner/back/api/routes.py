@@ -59,9 +59,9 @@ class GetAnnotations(Resource):
         if check_img is not None:
             return check_img
         if csv_path is None or csv_path == '':
-            print("No csv path provided, creating one...")
 
             csv_path = os.path.join(Path(images_folder).parent.absolute(), f'{os.path.basename(images_folder)}.csv')
+            print(f"No csv path provided, using {csv_path}")
             if not os.path.exists(csv_path):
                 with open(csv_path, 'w', newline='') as file:
                     writer = csv.writer(file)
