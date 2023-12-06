@@ -14,7 +14,7 @@ MAX_SIZE_IMG = 600
     Output: numpy image
 """
 def build_image(img_path, mask_path=None):
-    img = cv2.cvtColor(cv2.imread(img_path, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+    img = cv2.imread(img_path, cv2.IMREAD_COLOR)
     
     if mask_path is None:
         return resize_image(img)

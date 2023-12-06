@@ -1,7 +1,10 @@
+import csv
+import os
 from flask import Flask, request, send_file
 from flask_restx import Resource
 import io
-from PIL import Image
+import cv2
+from pathlib import Path
 
 from . import api
 from .utils import sha_generator, print_important
@@ -18,13 +21,17 @@ annotation_service = AnnotationService()
 image_service = ImageService()
 
 
+
 def send_numpy_image(image):
-    img = Image.fromarray(image.astype('uint8'))
-    file_object = io.BytesIO()
-    img.save(file_object, 'PNG')
+    # Convert the image from numpy array to JPEG
+    is_success, im_buf_arr = cv2.imencode(".jpg", image)
+    byte_im = im_buf_arr.tobytes()
+
+    # Create a BytesIO object
+    file_object = io.BytesIO(byte_im)
     file_object.seek(0)
-            
-    return send_file(file_object, mimetype='image/PNG')
+
+    return send_file(file_object, mimetype='image/JPEG')
 
 
 
@@ -51,6 +58,18 @@ class GetAnnotations(Resource):
         
         if check_img is not None:
             return check_img
+        if csv_path is None or csv_path == '':
+
+            csv_path = os.path.join(Path(images_folder).parent.absolute(), f'{os.path.basename(images_folder)}.csv')
+            print(f"No csv path provided, using {csv_path}")
+            if not os.path.exists(csv_path):
+                with open(csv_path, 'w', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow([id_column])
+                    for filename in os.listdir(images_folder):
+                        if filename.endswith(image_ext):
+                            writer.writerow([filename.removesuffix(image_ext)])
+
         return annotation_service.get_annotations(csv_path, first, offset, id_column)
         
         
